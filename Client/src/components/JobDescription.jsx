@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { Badge } from './ui/badge'
 import { Button } from './ui/button'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
-import { APPLICANT_API_END_POINT, JOB_API_END_POINT } from '@/utils/constant'
+import { APPLICANT_API_END_POINT, JOB_API_END_POINT, USER_API_END_POINT } from '@/utils/constant'
 import { setSingleJob } from '@/redux/jobSlice'
+import { setBookmarks } from '@/redux/authSlice'
 import { toast } from 'sonner'
 import Navbar from './shared/Navbar'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
+import { Bookmark } from 'lucide-react'
 
 // Custom markdown components for rich formatting
 // Custom markdown components for rich, distinct formatting
@@ -316,8 +318,12 @@ const normalizeDescription = (raw) => {
 
 const JobDescription = () => {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const { singleJob } = useSelector(state => state.job)
   const { user } = useSelector(state => state.auth)
+
+  const params = useParams()
+  const jobId = params.id
 
   const isInitiallyApplied =
     singleJob?.applications?.some(
@@ -326,8 +332,33 @@ const JobDescription = () => {
 
   const [isApplied, setIsApplied] = useState(isInitiallyApplied)
 
-  const params = useParams()
-  const jobId = params.id
+  const isBookmarked = user?.bookmarks?.some(
+    (id) => (typeof id === 'string' ? id : id?._id) === jobId
+  ) || false
+
+  const bookmarkHandler = async () => {
+    if (!user) {
+      toast.error("Please login to save jobs")
+      navigate("/login")
+      return
+    }
+    try {
+      const response = await axios.post(`${USER_API_END_POINT}/bookmark/${jobId}`, {}, {
+        withCredentials: true,
+      })
+      if (response.data.success) {
+        dispatch(setBookmarks(response.data.bookmarks))
+        if (response.data.isBookmarked) {
+          toast.success("Job saved for later ⭐")
+        } else {
+          toast.success("Job removed from bookmarks")
+        }
+      }
+    } catch (error) {
+      console.error(error)
+      toast.error(error.response?.data?.message || "Something went wrong")
+    }
+  }
 
   const applyJobHandler = async () => {
     try {
@@ -401,17 +432,32 @@ const JobDescription = () => {
               </Badge>
             </div>
           </div>
-          <Button
-            onClick={isApplied ? null : applyJobHandler}
-            disabled={isApplied}
-            className={`rounded-lg shrink-0 ${
-              isApplied
-                ? 'bg-gray-600 cursor-not-allowed'
-                : 'bg-[#7209b7] hover:bg-[#5f08ad] cursor-pointer'
-            }`}
-          >
-            {isApplied ? 'Applied' : 'Apply Now'}
-          </Button>
+          <div className="flex items-center gap-3 shrink-0">
+            <Button
+              variant="outline"
+              onClick={bookmarkHandler}
+              className={`rounded-lg cursor-pointer transition-all flex items-center gap-2 ${
+                isBookmarked 
+                  ? 'bg-purple-50 text-purple-700 border-purple-300 hover:bg-purple-100' 
+                  : 'hover:border-purple-300 hover:text-purple-700'
+              }`}
+              title={isBookmarked ? "Remove from bookmarks" : "Save for later"}
+            >
+              <Bookmark className={`w-4 h-4 ${isBookmarked ? 'fill-purple-700 text-purple-700' : ''}`} />
+              <span>{isBookmarked ? 'Saved' : 'Save for Later'}</span>
+            </Button>
+            <Button
+              onClick={isApplied ? null : applyJobHandler}
+              disabled={isApplied}
+              className={`rounded-lg ${
+                isApplied
+                  ? 'bg-gray-600 cursor-not-allowed'
+                  : 'bg-[#7209b7] hover:bg-[#5f08ad] cursor-pointer'
+              }`}
+            >
+              {isApplied ? 'Applied' : 'Apply Now'}
+            </Button>
+          </div>
         </div>
 
         {/* Meta info strip */}

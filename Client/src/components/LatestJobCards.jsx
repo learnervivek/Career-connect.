@@ -2,9 +2,45 @@ import React from 'react'
 import { Badge } from './ui/badge'
 import { useNavigate } from 'react-router-dom'
 import { MapPin, Building2, Bookmark, CheckCircle2, ArrowRight } from 'lucide-react'
+import { useSelector, useDispatch } from 'react-redux'
+import axios from 'axios'
+import { USER_API_END_POINT } from '@/utils/constant'
+import { setBookmarks } from '@/redux/authSlice'
+import { toast } from 'sonner'
 
 function LatestJobCards({ job }) {
     const navigate = useNavigate()
+    const dispatch = useDispatch()
+    const { user } = useSelector(store => store.auth)
+
+    const isBookmarked = user?.bookmarks?.some(
+        (id) => (typeof id === 'string' ? id : id?._id) === job?._id
+    ) || false
+
+    const bookmarkHandler = async (e) => {
+        e.stopPropagation()
+        if (!user) {
+            toast.error("Please login to save jobs")
+            navigate("/login")
+            return
+        }
+        try {
+            const response = await axios.post(`${USER_API_END_POINT}/bookmark/${job?._id}`, {}, {
+                withCredentials: true,
+            })
+            if (response.data.success) {
+                dispatch(setBookmarks(response.data.bookmarks))
+                if (response.data.isBookmarked) {
+                    toast.success("Job saved for later ⭐")
+                } else {
+                    toast.success("Job removed from bookmarks")
+                }
+            }
+        } catch (error) {
+            console.error(error)
+            toast.error(error.response?.data?.message || "Something went wrong")
+        }
+    }
 
     const calculateDaysAgo = (mongodbTime) => {
         if (!mongodbTime) return 'Recently'
@@ -93,14 +129,15 @@ function LatestJobCards({ job }) {
                     </span>
                     <button
                         type="button"
-                        onClick={(e) => {
-                            e.stopPropagation()
-                            navigate(`/description/${job?._id}`)
-                        }}
-                        className="text-gray-400 hover:text-purple-700 p-1 rounded-md transition-colors"
-                        title="Save Job"
+                        onClick={bookmarkHandler}
+                        className={`p-1.5 rounded-md transition-colors cursor-pointer ${
+                            isBookmarked
+                                ? "text-purple-700 bg-purple-50 hover:bg-purple-100"
+                                : "text-gray-400 hover:text-purple-700 hover:bg-purple-50"
+                        }`}
+                        title={isBookmarked ? "Remove from saved" : "Save Job"}
                     >
-                        <Bookmark className="w-4 h-4" />
+                        <Bookmark className={`w-4 h-4 ${isBookmarked ? "fill-purple-700 text-purple-700" : ""}`} />
                     </button>
                 </div>
             </div>

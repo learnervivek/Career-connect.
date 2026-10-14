@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
 import { Button } from '../ui/button'
 import { Avatar, AvatarImage } from '../ui/avatar'
-import { BriefcaseBusiness, BuildingIcon, Home, HomeIcon, LogOut, Menu, MenuIcon, SearchCheck, User2 } from 'lucide-react'
+import { Bookmark, BriefcaseBusiness, BuildingIcon, Home, HomeIcon, LogOut, Menu, MenuIcon, SearchCheck, User2 } from 'lucide-react'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'sonner'
 import axios from 'axios'
@@ -118,10 +118,16 @@ const Navbar = () => {
                                                 {
                                                     user && user?.role === "student" &&
                                                     (
-                                                        <div className='flex w-fit items-center gap-2 cursor-pointer'>
-                                                            <User2 />
-                                                            <Button className="cursor-pointer" variant="link"><Link to="/profile">View Profile</Link></Button>
-                                                        </div>
+                                                        <>
+                                                            <div className='flex w-fit items-center gap-2 cursor-pointer'>
+                                                                <User2 />
+                                                                <Button className="cursor-pointer" variant="link"><Link to="/profile">View Profile</Link></Button>
+                                                            </div>
+                                                            <div className='flex w-fit items-center gap-2 cursor-pointer'>
+                                                                <Bookmark className="w-4 h-4 ml-1" />
+                                                                <Button className="cursor-pointer" variant="link"><Link to="/profile">Saved Jobs ({user?.bookmarks?.length || 0})</Link></Button>
+                                                            </div>
+                                                        </>
                                                     )
                                                 }
 

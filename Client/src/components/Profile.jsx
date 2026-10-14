@@ -2,13 +2,15 @@ import React, { useState, useRef } from 'react'
 import Navbar from './shared/Navbar';
 import { Avatar, AvatarImage } from './ui/avatar';
 import { Button } from './ui/button';
-import { Contact, Mail, Pen, Camera, Loader2, FileText, Briefcase, Star } from 'lucide-react';
+import { Contact, Mail, Pen, Camera, Loader2, FileText, Briefcase, Star, Bookmark } from 'lucide-react';
 import { Badge } from './ui/badge';
 import { Label } from './ui/label';
 import AppliedJobTable from './AppliedJobTable';
+import SavedJobTable from './SavedJobTable';
 import UpdateProfileDialog from './UpdateProfileDialog';
 import { useSelector, useDispatch } from 'react-redux';
 import useGetAppliedJobs from '@/hooks/useGetAppliedJobs';
+import useGetSavedJobs from '@/hooks/useGetSavedJobs';
 import Footer from './shared/Footer';
 import { motion } from "framer-motion";
 import axios from 'axios';
@@ -18,11 +20,14 @@ import { toast } from 'sonner';
 
 function Profile() {
     useGetAppliedJobs();
+    useGetSavedJobs();
     const dispatch = useDispatch();
 
     const [open, setOpen] = useState(false);
     const [photoLoading, setPhotoLoading] = useState(false);
+    const [activeTab, setActiveTab] = useState('applied');
     const { user } = useSelector(store => store.auth);
+    const { allAppliedJobs, savedJobs } = useSelector(store => store.job);
     const photoInputRef = useRef(null);
 
     const handleAvatarClick = () => {
@@ -241,20 +246,57 @@ function Profile() {
                         </motion.div>
                     </div>
 
-                    {/* Applied Jobs Card */}
+                    {/* Jobs Management Card (Applied & Saved) */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.4, duration: 0.5 }}
                         className="bg-white rounded-3xl shadow-sm border border-gray-100 p-6"
                     >
-                        <div className="flex items-center gap-2 mb-6">
-                            <div className="w-8 h-8 bg-green-100 rounded-xl flex items-center justify-center">
-                                <Briefcase className="w-4 h-4 text-green-600" />
+                        {/* Tabs Header */}
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-gray-100">
+                            <div className="flex items-center gap-2">
+                                <button
+                                    onClick={() => setActiveTab('applied')}
+                                    className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
+                                        activeTab === 'applied'
+                                            ? 'bg-purple-600 text-white shadow-sm'
+                                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                                    }`}
+                                >
+                                    <Briefcase className="w-4 h-4" />
+                                    <span>Applied Jobs</span>
+                                    <span className={`px-2 py-0.5 text-xs rounded-full ${
+                                        activeTab === 'applied' ? 'bg-purple-500 text-white' : 'bg-gray-200 text-gray-700'
+                                    }`}>
+                                        {allAppliedJobs?.length || 0}
+                                    </span>
+                                </button>
+
+                                <button
+                                    onClick={() => setActiveTab('saved')}
+                                    className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
+                                        activeTab === 'saved'
+                                            ? 'bg-purple-600 text-white shadow-sm'
+                                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                                    }`}
+                                >
+                                    <Bookmark className="w-4 h-4" />
+                                    <span>Saved Jobs</span>
+                                    <span className={`px-2 py-0.5 text-xs rounded-full ${
+                                        activeTab === 'saved' ? 'bg-purple-500 text-white' : 'bg-gray-200 text-gray-700'
+                                    }`}>
+                                        {savedJobs?.length || 0}
+                                    </span>
+                                </button>
                             </div>
-                            <h2 className="font-bold text-gray-900 text-lg">Applied Jobs</h2>
                         </div>
-                        <AppliedJobTable />
+
+                        {activeTab === 'applied' ? (
+                            <AppliedJobTable />
+                        ) : (
+                            <SavedJobTable />
+                        )}
                     </motion.div>
                 </motion.div>
             </div>

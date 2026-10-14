@@ -1,4 +1,5 @@
 import { User } from "../models/user.model.js";
+import { Job } from "../models/job.model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import getDataUri from "../utils/datauri.js";
@@ -116,6 +117,7 @@ export const login = async (req, res) => {
       phoneNumber: user.phoneNumber,
       role: user.role,
       profile: user.profile,
+      bookmarks: user.bookmarks || [],
     };
 
     const isProduction = process.env.NODE_ENV === "production";
@@ -223,6 +225,7 @@ export const updateProfile = async (req, res) => {
       phoneNumber: user.phoneNumber,
       role: user.role,
       profile: user.profile,
+      bookmarks: user.bookmarks || [],
     };
 
     return res.status(200).json({
@@ -274,6 +277,7 @@ export const updateProfilePhoto = async (req, res) => {
       phoneNumber: user.phoneNumber,
       role: user.role,
       profile: user.profile,
+      bookmarks: user.bookmarks || [],
     };
 
     return res.status(200).json({
@@ -285,6 +289,102 @@ export const updateProfilePhoto = async (req, res) => {
     console.log(error);
     return res.status(500).json({
       message: error.message || "Internal server error during photo update",
+      success: false,
+    });
+  }
+};
+
+export const toggleBookmark = async (req, res) => {
+  try {
+    const userId = req.id;
+    const jobId = req.params.id;
+
+    if (!jobId) {
+      return res.status(400).json({
+        message: "Job ID is required",
+        success: false,
+      });
+    }
+
+    const job = await Job.findById(jobId);
+    if (!job) {
+      return res.status(404).json({
+        message: "Job not found",
+        success: false,
+      });
+    }
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+        success: false,
+      });
+    }
+
+    if (!user.bookmarks) {
+      user.bookmarks = [];
+    }
+
+    const bookmarkIndex = user.bookmarks.findIndex(
+      (id) => id.toString() === jobId.toString()
+    );
+
+    let isBookmarked = false;
+    let message = "";
+
+    if (bookmarkIndex > -1) {
+      user.bookmarks.splice(bookmarkIndex, 1);
+      isBookmarked = false;
+      message = "Job removed from bookmarks";
+    } else {
+      user.bookmarks.push(jobId);
+      isBookmarked = true;
+      message = "Job saved for later";
+    }
+
+    await user.save();
+
+    return res.status(200).json({
+      message,
+      isBookmarked,
+      bookmarks: user.bookmarks,
+      success: true,
+    });
+  } catch (error) {
+    console.error("Error in toggleBookmark:", error);
+    return res.status(500).json({
+      message: "Internal server error",
+      success: false,
+    });
+  }
+};
+
+export const getBookmarkedJobs = async (req, res) => {
+  try {
+    const userId = req.id;
+    const user = await User.findById(userId).populate({
+      path: "bookmarks",
+      populate: {
+        path: "company",
+      },
+    });
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+        success: false,
+      });
+    }
+
+    return res.status(200).json({
+      bookmarks: user.bookmarks || [],
+      success: true,
+    });
+  } catch (error) {
+    console.error("Error in getBookmarkedJobs:", error);
+    return res.status(500).json({
+      message: "Internal server error",
       success: false,
     });
   }

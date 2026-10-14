@@ -19,12 +19,17 @@ const authSlice = createSlice({
         },
         setToken: (state, action) => {
             state.token = action.payload;
+        },
+        setBookmarks: (state, action) => {
+            if (state.user) {
+                state.user.bookmarks = action.payload;
+            }
         }
 
     }
 });
 
 
-export const { setLoading, setUser, setToken } = authSlice.actions;
+export const { setLoading, setUser, setToken, setBookmarks } = authSlice.actions;
 
 export default authSlice.reducer;
