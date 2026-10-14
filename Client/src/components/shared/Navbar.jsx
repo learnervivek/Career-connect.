@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'sonner'
 import axios from 'axios'
 import { USER_API_END_POINT } from '@/utils/constant'
-import { setUser } from '@/redux/authSlice'
+import { setUser, setToken } from '@/redux/authSlice'
 import { setSearchedQuery } from '@/redux/jobSlice'
 import { motion } from "framer-motion"
 
@@ -21,18 +21,20 @@ const Navbar = () => {
 
     const logoutHandler = async () => {
         try {
-            const response = await axios.post(`${USER_API_END_POINT}/logout`, {
+            const response = await axios.post(`${USER_API_END_POINT}/logout`, {}, {
                 withCredentials: true
             })
             if (response.data.success) {
                 dispatch(setUser(null));
+                dispatch(setToken(null));
+                localStorage.removeItem("token");
                 navigate('/');
                 toast.success(response.data.message);
             }
 
         } catch (error) {
             console.log(error);
-            toast.error(error.response.data.message);
+            toast.error(error.response?.data?.message || "Failed to logout");
         }
     }
 

@@ -9,7 +9,7 @@ import axios from 'axios'
 import { USER_API_END_POINT } from '@/utils/constant'
 import { toast } from 'sonner'
 import { useDispatch, useSelector } from 'react-redux'
-import { setLoading, setUser } from '@/redux/authSlice'
+import { setLoading, setUser, setToken } from '@/redux/authSlice'
 import { Loader2 } from 'lucide-react'
 
 const Login = () => {
@@ -42,6 +42,10 @@ const Login = () => {
       });
       if (response.data.success) {
         dispatch(setUser(response.data.user));
+        if (response.data.token) {
+          dispatch(setToken(response.data.token));
+          localStorage.setItem("token", response.data.token);
+        }
         navigate("/");
         toast.success(response.data.message);
       }

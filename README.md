@@ -325,7 +325,12 @@ Career-Connect is deployed as two separate projects on **Vercel**:
 - Set `NODE_ENV=production` on the backend — disables `app.listen()` for serverless compatibility
 - The backend uses a **cached MongoDB connection** pattern to handle Vercel serverless cold starts efficiently
 - MongoDB Atlas must allow connections from **all IPs** (`0.0.0.0/0`) since Vercel uses dynamic IPs
-- Both `vercel.json` files are pre-configured — just set environment variables in the Vercel dashboard
+- Both `vercel.json` files are pre-configured — set environment variables in the Vercel dashboard:
+  - Backend: set `FRONTEND_URL` to the deployed frontend origin, without a trailing slash, and set `NODE_ENV=production`.
+  - Frontend: set `VITE_BACKEND_URL` to the public backend origin, without `/api/v1` and without a trailing slash. For example, `https://your-backend.vercel.app`.
+  - Redeploy the frontend after changing `VITE_BACKEND_URL`; Vite embeds `VITE_*` values during the build.
+- Do not use `http://localhost:8000` as the deployed frontend's `VITE_BACKEND_URL`. That address points to the visitor's own computer.
+- If the frontend and backend use different domains, the backend deployment must allow public access; Vercel Deployment Protection must not block browser API requests.
 
 For full step-by-step deployment instructions, see [Vercel Deployment Guide](#).
 
