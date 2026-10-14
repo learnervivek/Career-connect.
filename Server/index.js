@@ -11,37 +11,36 @@ dotenv.config({});
 
 const app = express();
 
-// middlewares
+// ─── Middlewares ───────────────────────────────────────────────────────────
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+// ─── CORS ──────────────────────────────────────────────────────────────────
 const corsOptions = {
     origin: (origin, callback) => {
-        // Allow requests with no origin (mobile apps, curl, Postman, server-to-server)
+        // Allow requests with no origin (curl, Postman, mobile apps)
         if (!origin) return callback(null, true);
 
-        // Strip trailing slash for consistent comparison
-        const cleanOrigin = origin.replace(/\/$/, "");
+        // Normalize: strip trailing slash
+        const clean = (url) => url.replace(/\/$/, "");
+        const incoming = clean(origin);
 
-        const allowedOrigins = [
-            // Local dev
+        const whitelist = [
             "http://localhost:5173",
             "http://localhost:3000",
-            // Vercel frontend URLs (add yours here without trailing slash)
             "https://career-connect-xzga-uz3ziwahf.vercel.app",
             "https://career-connect-xzga.vercel.app",
         ];
 
-        // Also allow any URL set via FRONTEND_URL env var
         if (process.env.FRONTEND_URL) {
-            allowedOrigins.push(process.env.FRONTEND_URL.replace(/\/$/, ""));
+            whitelist.push(clean(process.env.FRONTEND_URL));
         }
 
-        if (allowedOrigins.includes(cleanOrigin)) {
+        if (whitelist.includes(incoming)) {
             callback(null, true);
         } else {
-            console.error(`CORS blocked origin: ${origin}`);
+            console.error(`CORS blocked: ${origin}`);
             callback(new Error(`CORS: Origin ${origin} not allowed`));
         }
     },
@@ -51,32 +50,42 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+app.options("*", cors(corsOptions)); // pre-flight for all routes
 
-// Handle preflight OPTIONS requests explicitly
-app.options("*", cors(corsOptions));
-
-app.get("/", (req, res) => {
-    res.send("Career-Connect API is running ✅");
+// ─── DB Connection Middleware ──────────────────────────────────────────────
+// CRITICAL for Vercel serverless: ensures DB is connected before every request.
+// Without this, cold-start requests hit the route handlers before mongoose is ready.
+app.use(async (req, res, next) => {
+    try {
+        await connectDB();
+        next();
+    } catch (err) {
+        console.error("DB connection failed:", err.message);
+        res.status(503).json({
+            success: false,
+            message: "Service unavailable. Database connection failed.",
+        });
+    }
 });
 
+// ─── Health check ──────────────────────────────────────────────────────────
+app.get("/", (req, res) => {
+    res.json({ status: "ok", message: "Career-Connect API is running ✅" });
+});
+
+// ─── Routes ────────────────────────────────────────────────────────────────
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/company", companyRouter);
 app.use("/api/v1/job", jobRouter);
 app.use("/api/v1/application", applicantionRouter);
 
+// ─── Local dev server ──────────────────────────────────────────────────────
 const PORT = process.env.PORT || 8000;
-
-// Only start the HTTP server in local development
 if (process.env.NODE_ENV !== "production") {
-    connectDB().then(() => {
-        app.listen(PORT, () => {
-            console.log(`Server running at port ${PORT}`);
-        });
+    app.listen(PORT, () => {
+        console.log(`Server running at port ${PORT}`);
     });
-} else {
-    // In production (Vercel), connect to DB on first request via lazy connection
-    connectDB();
 }
 
-// Export for Vercel serverless
+// ─── Export for Vercel serverless ─────────────────────────────────────────
 export default app;
