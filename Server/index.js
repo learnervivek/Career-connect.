@@ -11,32 +11,49 @@ dotenv.config({});
 
 const app = express();
 
-connectDB()
+connectDB();
 
 // middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
+const allowedOrigins = [
+    process.env.FRONTEND_URL || "http://localhost:5173",
+    "http://localhost:5173",
+];
+
 const corsOptions = {
-    origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+    origin: (origin, callback) => {
+        // Allow requests with no origin (mobile apps, curl, Postman, etc.)
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
     credentials: true,
-}
+};
 app.use(cors(corsOptions));
 
-app.get("/",(req,res)=>{
-    res.send("Welcome to the server");
-})
-
-const PORT = process.env.PORT || 3000;
-
+app.get("/", (req, res) => {
+    res.send("Career-Connect API is running ✅");
+});
 
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/company", companyRouter);
 app.use("/api/v1/job", jobRouter);
 app.use("/api/v1/application", applicantionRouter);
 
+const PORT = process.env.PORT || 8000;
 
-app.listen(PORT, () => {
-    
-    console.log(`Server running at port ${PORT}`);
-})
+// Only start the HTTP server in local development
+if (process.env.NODE_ENV !== "production") {
+    app.listen(PORT, () => {
+        console.log(`Server running at port ${PORT}`);
+    });
+}
+
+// Export for Vercel serverless
+export default app;
