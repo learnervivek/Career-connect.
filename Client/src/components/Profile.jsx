@@ -2,11 +2,12 @@ import React, { useState, useRef } from 'react'
 import Navbar from './shared/Navbar';
 import { Avatar, AvatarImage } from './ui/avatar';
 import { Button } from './ui/button';
-import { Contact, Mail, Pen, Camera, Loader2, FileText, Briefcase, Star, Bookmark } from 'lucide-react';
+import { Contact, Mail, Pen, Camera, Loader2, FileText, Briefcase, Star, Bookmark, Calendar } from 'lucide-react';
 import { Badge } from './ui/badge';
 import { Label } from './ui/label';
 import AppliedJobTable from './AppliedJobTable';
 import SavedJobTable from './SavedJobTable';
+import CandidateInterviews from './CandidateInterviews';
 import UpdateProfileDialog from './UpdateProfileDialog';
 import { useSelector, useDispatch } from 'react-redux';
 import useGetAppliedJobs from '@/hooks/useGetAppliedJobs';
@@ -289,13 +290,27 @@ function Profile() {
                                         {savedJobs?.length || 0}
                                     </span>
                                 </button>
+
+                                <button
+                                    onClick={() => setActiveTab('interviews')}
+                                    className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
+                                        activeTab === 'interviews'
+                                            ? 'bg-purple-600 text-white shadow-sm'
+                                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                                    }`}
+                                >
+                                    <Calendar className="w-4 h-4" />
+                                    <span>Interviews</span>
+                                </button>
                             </div>
                         </div>
 
                         {activeTab === 'applied' ? (
                             <AppliedJobTable />
-                        ) : (
+                        ) : activeTab === 'saved' ? (
                             <SavedJobTable />
+                        ) : (
+                            <CandidateInterviews />
                         )}
                     </motion.div>
                 </motion.div>

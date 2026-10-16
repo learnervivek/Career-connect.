@@ -3,10 +3,10 @@ import authSlice from "./authSlice";
 import jobSlice from "./jobSlice";
 import companySlice from "./companySlice"
 import applicationSlice from "./applicationSlice";
+import interviewSlice from "./interviewSlice";
 
 
 import {
-    persistStore,
     persistReducer,
     FLUSH,
     REHYDRATE,
@@ -28,7 +28,8 @@ const rootReducer = combineReducers({
     auth: authSlice,
     job: jobSlice,
     company: companySlice,
-    application: applicationSlice
+    application: applicationSlice,
+    interview: interviewSlice
 })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)

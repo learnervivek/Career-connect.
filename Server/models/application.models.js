@@ -15,7 +15,13 @@ const applicationSchema = new mongoose.Schema({
         type: String,
         enum: ['pending', 'accepted', 'rejected'],
         default: 'pending',
-    }
+    },
+    interviews: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Interview",
+        }
+    ]
 
 }, { timestamps: true })
 

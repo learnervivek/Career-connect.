@@ -4,7 +4,7 @@ import { Label } from '../ui/label'
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
 import { useNavigate } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
 import axios from 'axios'
 import { JOB_API_END_POINT } from '@/utils/constant'
@@ -18,7 +18,6 @@ const PostJob = () => {
 
     const { companies } = useSelector(store => store.company)
     const navigate = useNavigate();
-    const dispatch = useDispatch();
 
 
     const [loading, setLoading] = useState(false);

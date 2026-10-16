@@ -7,6 +7,7 @@ import Home from './components/Home'
 import Jobs from './components/Jobs'
 import Browse from './components/Browse'
 import Profile from './components/Profile'
+import CandidateInterviewsPage from './components/CandidateInterviewsPage'
 import JobDescription from './components/JobDescription'
 import Companies from './components/admin/Companies'
 import CompanyCreate from './components/admin/CompanyCreate'
@@ -15,6 +16,7 @@ import AdminJobs from './components/admin/AdminJobs'
 import PostJob from './components/admin/PostJob'
 import JobApplicants from './components/admin/JobApplicants'
 import EditJob from './components/admin/EditJob'
+import RecruiterInterviews from './components/admin/RecruiterInterviews'
 import ProtectedRoute from './components/admin/ProtectedRoute'
 
 const appRouter = createBrowserRouter([
@@ -50,6 +52,10 @@ const appRouter = createBrowserRouter([
     path: "/profile",
     element: <Profile />
   },
+  {
+    path: "/interviews",
+    element: <CandidateInterviewsPage />
+  },
 
 
   // for admin role
@@ -80,6 +86,10 @@ const appRouter = createBrowserRouter([
   {
     path: "/admin/jobs/:id/applicants",
     element: <ProtectedRoute><JobApplicants /></ProtectedRoute>
+  },
+  {
+    path: "/admin/interviews",
+    element: <ProtectedRoute><RecruiterInterviews /></ProtectedRoute>
   },
 
 

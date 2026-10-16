@@ -154,7 +154,7 @@ const normalizeDescription = (raw) => {
   })
 
   // 4. Skills extraction: "Required Skills JavaScriptJavaReact..."
-  text = text.replace(/Required\s*Skills\s+([A-Za-z0-9\s\/\-_.,]+?)(?=(?:Qualifications|Responsibilities|Requirements|About|$))/i, (m, skillStr) => {
+  text = text.replace(/Required\s*Skills\s+([A-Za-z0-9\s/.,_-]+?)(?=(?:Qualifications|Responsibilities|Requirements|About|$))/i, (m, skillStr) => {
     const knownSkills = [
       'JavaScript', 'TypeScript', 'React', 'Node.js', 'Java', 'Python',
       'UX/UI Design', 'REST API', 'GraphQL', 'CSS', 'HTML', 'AWS', 'Azure', 'GCP',

@@ -1,5 +1,6 @@
 import { Application } from "../models/application.models.js";
 import { Job } from "../models/job.models.js";
+import { Interview } from "../models/interview.models.js";
 
 
 // for role === "student"
@@ -69,6 +70,10 @@ export const getAppliedJobs = async (req, res) => {
                     path: "company",
                     options: { sort: { createdAt: -1 } },
                 }
+            })
+            .populate({
+                path: "interviews",
+                options: { sort: { roundNumber: 1, scheduledDate: 1 } }
             });
 
         if (!application) {
@@ -99,9 +104,10 @@ export const getApplicants = async (req, res) => {
         const job = await Job.findById(jobId).populate({
             path: "applications",
             options: { sort: { createdAt: -1 } },
-            populate: {
-                path: "applicant",
-            }
+            populate: [
+                { path: "applicant" },
+                { path: "interviews", options: { sort: { roundNumber: 1, scheduledDate: 1 } } }
+            ]
         })
         if (!job) {
             return res.status(404).json({

@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
 import { Button } from '../ui/button'
 import { Avatar, AvatarImage } from '../ui/avatar'
-import { Bookmark, BriefcaseBusiness, BuildingIcon, Home, HomeIcon, LogOut, Menu, MenuIcon, SearchCheck, User2 } from 'lucide-react'
+import { Bookmark, BriefcaseBusiness, BuildingIcon, Calendar, Home, HomeIcon, LogOut, Menu, MenuIcon, SearchCheck, User2 } from 'lucide-react'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'sonner'
 import axios from 'axios'
@@ -11,6 +11,7 @@ import { USER_API_END_POINT } from '@/utils/constant'
 import { setUser, setToken } from '@/redux/authSlice'
 import { setSearchedQuery } from '@/redux/jobSlice'
 import { motion } from "framer-motion"
+import NotificationBell from './NotificationBell'
 
 const Navbar = () => {
     const dispatch = useDispatch();
@@ -58,12 +59,14 @@ const Navbar = () => {
                                 <>
                                     <li><Link to="/admin/companies">Companies</Link></li>
                                     <li><Link to="/admin/jobs">Jobs</Link></li>
+                                    <li><Link to="/admin/interviews">Interviews</Link></li>
                                 </>
                                 : (
                                     <>
                                         <motion.li onClick={resetQuery}><Link to="/">Home</Link></motion.li>
                                         <li onClick={resetQuery}><Link to="/jobs">Jobs</Link></li>
                                         <li onClick={resetQuery}><Link to="/browse">Browse</Link></li>
+                                        <li onClick={resetQuery}><Link to="/interviews">Interviews</Link></li>
                                     </>
                                 )
                         }
@@ -82,7 +85,8 @@ const Navbar = () => {
                                 </Link>
                             </div>
                             :
-                            <div>
+                            <div className='flex items-center gap-3'>
+                                <NotificationBell />
                                 <Popover>
                                     <PopoverTrigger asChild>
                                         <Avatar className="cursor-pointer">
@@ -127,6 +131,10 @@ const Navbar = () => {
                                                                 <Bookmark className="w-4 h-4 ml-1" />
                                                                 <Button className="cursor-pointer" variant="link"><Link to="/profile">Saved Jobs ({user?.bookmarks?.length || 0})</Link></Button>
                                                             </div>
+                                                            <div className='flex w-fit items-center gap-2 cursor-pointer'>
+                                                                <Calendar className="w-4 h-4 ml-1 text-purple-600" />
+                                                                <Button className="cursor-pointer" variant="link"><Link to="/interviews">My Interviews</Link></Button>
+                                                            </div>
                                                         </>
                                                     )
                                                 }
@@ -166,6 +174,11 @@ const Navbar = () => {
                                                     <BriefcaseBusiness />
                                                     <p className='text-lg font-medium' to="/admin/jobs">Jobs</p>
                                                 </div>
+
+                                                <div onClick={() => navigate("/admin/interviews")} className='flex items-center gap-3 cursor-pointer'>
+                                                    <Calendar className="size-5" />
+                                                    <p className='text-lg font-medium'>Interviews</p>
+                                                </div>
                                             </div>
                                             : (
                                                 <>
@@ -193,6 +206,11 @@ const Navbar = () => {
                                                             className='flex items-center gap-3 cursor-pointer'>
                                                             <SearchCheck />
                                                             <p className='text-lg font-medium' to="/admin/jobs">Browse</p>
+                                                        </div>
+
+                                                        <div onClick={() => navigate("/interviews")} className='flex items-center gap-3 cursor-pointer'>
+                                                            <Calendar className="size-5" />
+                                                            <p className='text-lg font-medium'>Interviews</p>
                                                         </div>
                                                     </div>
 
