@@ -13,6 +13,8 @@ import {
     TrendingUp,
     ShieldCheck,
     Zap,
+    BookOpen,
+    Calendar,
 } from 'lucide-react'
 
 function HeroSection() {
@@ -59,21 +61,42 @@ function HeroSection() {
                         {/* Eyebrow badge */}
                         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-purple-50 border border-purple-200/80 text-purple-700 text-xs font-semibold uppercase tracking-wider">
                             <Sparkles className="w-3.5 h-3.5 text-[#F83002]" />
-                            <span>The Modern Career Platform • 500+ Verified Roles</span>
+                            <span>Unified Career Platform • Jobs, Roadmaps & Interviews</span>
                         </div>
 
                         {/* Main Headline */}
                         <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 tracking-tight leading-[1.15]">
-                            Find Your Dream Job. <br />
-                            <span className="bg-gradient-to-r from-[#6A38C2] to-[#8d4fe6] bg-clip-text text-transparent">
-                                Build Your Future.
+                            Your Career. Your Preparation. <br />
+                            <span className="bg-gradient-to-r from-[#6A38C2] via-[#8d4fe6] to-[#F83002] bg-clip-text text-transparent">
+                                Your Next Opportunity.
                             </span>
                         </h1>
 
                         {/* Subtitle */}
                         <p className="text-base sm:text-lg text-gray-600 max-w-xl mx-auto lg:mx-0 leading-relaxed">
-                            Connect with leading companies and discover verified opportunities across engineering, product, AI, and design with full salary transparency.
+                            Discover relevant jobs, prepare for top companies with structured roadmaps, track applications, and manage interviews—all in one place.
                         </p>
+
+                        {/* Primary Action Buttons */}
+                        <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3.5 pt-1">
+                            <button
+                                type="button"
+                                onClick={() => navigate('/jobs')}
+                                className="bg-[#6A38C2] hover:bg-[#5b30a6] text-white font-semibold px-6 py-3 rounded-xl flex items-center justify-center gap-2 shadow-md shadow-purple-200 hover:shadow-lg transition-all cursor-pointer"
+                            >
+                                <Briefcase className="w-4 h-4" />
+                                <span>Explore Jobs</span>
+                            </button>
+
+                            <button
+                                type="button"
+                                onClick={() => navigate('/preparation')}
+                                className="bg-white hover:bg-purple-50 text-purple-700 font-semibold border-2 border-purple-200 hover:border-purple-300 px-6 py-3 rounded-xl flex items-center justify-center gap-2 transition-all cursor-pointer shadow-xs"
+                            >
+                                <BookOpen className="w-4 h-4 text-[#F83002]" />
+                                <span>Start Preparing</span>
+                            </button>
+                        </div>
 
                         {/* Dual-Field Search Container */}
                         <form
@@ -110,17 +133,17 @@ function HeroSection() {
                             {/* Search Submit Button */}
                             <button
                                 type="submit"
-                                className="bg-[#6A38C2] hover:bg-[#5b30a6] text-white font-semibold px-7 py-3 rounded-xl flex items-center justify-center gap-2 shadow-md shadow-purple-200 transition-all cursor-pointer shrink-0"
+                                className="bg-[#6A38C2] hover:bg-[#5b30a6] text-white font-semibold px-6 py-3 rounded-xl flex items-center justify-center gap-2 shadow-md shadow-purple-200 transition-all cursor-pointer shrink-0"
                             >
                                 <Search className="w-4 h-4" />
-                                <span>Find Jobs</span>
+                                <span>Search</span>
                             </button>
                         </form>
 
                         {/* Popular Search Tags */}
                         <div className="flex items-center justify-center lg:justify-start flex-wrap gap-2 pt-1 text-xs text-gray-500">
                             <span className="font-semibold text-gray-700">Popular:</span>
-                            {['Full Stack', 'Cloud AI', 'Remote', 'Bengaluru', 'Internship'].map((tag) => (
+                            {['Full Stack', 'TCS NQT', 'Cloud AI', 'System Design', 'Remote', 'Bengaluru'].map((tag) => (
                                 <button
                                     key={tag}
                                     type="button"
@@ -132,25 +155,75 @@ function HeroSection() {
                             ))}
                         </div>
 
-                        {/* Secondary CTAs */}
-                        <div className="flex items-center justify-center lg:justify-start gap-5 pt-3 text-sm">
-                            <button
-                                onClick={() => navigate('/jobs')}
-                                className="font-semibold text-purple-700 hover:text-purple-800 flex items-center gap-1.5 group cursor-pointer"
-                            >
-                                <span>Explore all open positions</span>
-                                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                            </button>
+                        {/* Secondary Contextual Links */}
+                        <div className="flex items-center justify-center lg:justify-start gap-4 pt-2 text-sm flex-wrap">
+                            {user && user.role !== 'recruiter' && (
+                                <>
+                                    <button
+                                        onClick={() => navigate('/my-preparation')}
+                                        className="font-semibold text-purple-700 hover:text-purple-800 flex items-center gap-1.5 group cursor-pointer"
+                                    >
+                                        <BookOpen className="w-4 h-4 text-purple-600" />
+                                        <span>My Prep Dashboard</span>
+                                        <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                                    </button>
 
-                            <span className="text-gray-300">•</span>
+                                    <span className="text-gray-300">•</span>
 
-                            <button
-                                onClick={() => navigate(user?.role === 'recruiter' ? '/admin/jobs' : '/signup')}
-                                className="font-medium text-gray-600 hover:text-gray-900 flex items-center gap-1.5 cursor-pointer"
-                            >
-                                <Building2 className="w-4 h-4 text-gray-400" />
-                                <span>Hiring? Post a Job</span>
-                            </button>
+                                    <button
+                                        onClick={() => navigate('/interviews')}
+                                        className="font-medium text-gray-600 hover:text-gray-900 flex items-center gap-1.5 cursor-pointer"
+                                    >
+                                        <Calendar className="w-4 h-4 text-purple-500" />
+                                        <span>My Scheduled Interviews</span>
+                                    </button>
+                                </>
+                            )}
+
+                            {user && user.role === 'recruiter' && (
+                                <>
+                                    <button
+                                        onClick={() => navigate('/admin/jobs')}
+                                        className="font-semibold text-purple-700 hover:text-purple-800 flex items-center gap-1.5 group cursor-pointer"
+                                    >
+                                        <Briefcase className="w-4 h-4 text-purple-600" />
+                                        <span>Recruiter Dashboard</span>
+                                        <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                                    </button>
+
+                                    <span className="text-gray-300">•</span>
+
+                                    <button
+                                        onClick={() => navigate('/admin/interviews')}
+                                        className="font-medium text-gray-600 hover:text-gray-900 flex items-center gap-1.5 cursor-pointer"
+                                    >
+                                        <Calendar className="w-4 h-4 text-purple-500" />
+                                        <span>Coordinate Interviews</span>
+                                    </button>
+                                </>
+                            )}
+
+                            {!user && (
+                                <>
+                                    <button
+                                        onClick={() => navigate('/jobs')}
+                                        className="font-semibold text-purple-700 hover:text-purple-800 flex items-center gap-1.5 group cursor-pointer"
+                                    >
+                                        <span>Explore 500+ Verified Jobs</span>
+                                        <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                                    </button>
+
+                                    <span className="text-gray-300">•</span>
+
+                                    <button
+                                        onClick={() => navigate('/signup')}
+                                        className="font-medium text-gray-600 hover:text-gray-900 flex items-center gap-1.5 cursor-pointer"
+                                    >
+                                        <Building2 className="w-4 h-4 text-gray-400" />
+                                        <span>Hiring Talent? Post a Job</span>
+                                    </button>
+                                </>
+                            )}
                         </div>
                     </div>
 

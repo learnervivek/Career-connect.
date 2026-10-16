@@ -9,6 +9,9 @@ import jobRouter from "./routes/job.routes.js";
 import applicantionRouter from "./routes/application.routes.js";
 import interviewRouter from "./routes/interview.routes.js";
 import notificationRouter from "./routes/notification.routes.js";
+import preparationRouter from "./routes/preparation.routes.js";
+import progressRouter from "./routes/progress.routes.js";
+import adminPreparationRouter from "./routes/adminPreparation.routes.js";
 dotenv.config({});
 
 const app = express();
@@ -83,6 +86,9 @@ app.use("/api/v1/application", applicantionRouter);
 app.use("/api/v1/interviews", interviewRouter);
 app.use("/api/v1/interview", interviewRouter);
 app.use("/api/v1/notifications", notificationRouter);
+app.use("/api/v1/preparation", preparationRouter);
+app.use("/api/v1", progressRouter);
+app.use("/api/v1/admin/preparation", adminPreparationRouter);
 
 // ─── Local dev server ──────────────────────────────────────────────────────
 const PORT = process.env.PORT || 8000;

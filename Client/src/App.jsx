@@ -9,6 +9,10 @@ import Browse from './components/Browse'
 import Profile from './components/Profile'
 import CandidateInterviewsPage from './components/CandidateInterviewsPage'
 import JobDescription from './components/JobDescription'
+import CompanyPreparationPage from './components/preparation/CompanyPreparationPage'
+import CompanyDetailsPage from './components/preparation/CompanyDetailsPage'
+import RoadmapDetailsPage from './components/preparation/RoadmapDetailsPage'
+import MyPreparationDashboard from './components/preparation/MyPreparationDashboard'
 import Companies from './components/admin/Companies'
 import CompanyCreate from './components/admin/CompanyCreate'
 import CompanySetup from './components/admin/CompanySetup'
@@ -17,6 +21,7 @@ import PostJob from './components/admin/PostJob'
 import JobApplicants from './components/admin/JobApplicants'
 import EditJob from './components/admin/EditJob'
 import RecruiterInterviews from './components/admin/RecruiterInterviews'
+import AdminPreparationDashboard from './components/admin/preparation/AdminPreparationDashboard'
 import ProtectedRoute from './components/admin/ProtectedRoute'
 
 const appRouter = createBrowserRouter([
@@ -56,6 +61,26 @@ const appRouter = createBrowserRouter([
     path: "/interviews",
     element: <CandidateInterviewsPage />
   },
+  {
+    path: "/preparation",
+    element: <CompanyPreparationPage />
+  },
+  {
+    path: "/preparation/companies/:slugOrId",
+    element: <CompanyDetailsPage />
+  },
+  {
+    path: "/preparation/roadmaps/:slugOrId",
+    element: <RoadmapDetailsPage />
+  },
+  {
+    path: "/preparation/dashboard",
+    element: <MyPreparationDashboard />
+  },
+  {
+    path: "/my-preparation",
+    element: <MyPreparationDashboard />
+  },
 
 
   // for admin role
@@ -90,6 +115,10 @@ const appRouter = createBrowserRouter([
   {
     path: "/admin/interviews",
     element: <ProtectedRoute><RecruiterInterviews /></ProtectedRoute>
+  },
+  {
+    path: "/admin/preparation",
+    element: <ProtectedRoute><AdminPreparationDashboard /></ProtectedRoute>
   },
 
 

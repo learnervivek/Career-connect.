@@ -69,13 +69,18 @@ const Footer = () => {
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/browse" className="hover:text-purple-700 transition-colors">
-                                    Featured Positions
+                                <Link to="/preparation" className="hover:text-purple-700 transition-colors">
+                                    Company Prep Hub
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/jobs" className="hover:text-purple-700 transition-colors">
-                                    Remote Engineering
+                                <Link to="/interviews" className="hover:text-purple-700 transition-colors">
+                                    Interview Portal
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to="/my-preparation" className="hover:text-purple-700 transition-colors">
+                                    My Preparation
                                 </Link>
                             </li>
                             <li>
@@ -98,18 +103,23 @@ const Footer = () => {
                                 </Link>
                             </li>
                             <li>
+                                <Link to="/admin/interviews" className="hover:text-purple-700 transition-colors">
+                                    Coordinate Interviews
+                                </Link>
+                            </li>
+                            <li>
                                 <Link to="/admin/companies" className="hover:text-purple-700 transition-colors">
                                     Company Dashboard
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/signup" className="hover:text-purple-700 transition-colors">
-                                    Recruiter Sign Up
+                                <Link to="/admin/preparation" className="hover:text-purple-700 transition-colors">
+                                    Curate Roadmaps
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/admin/jobs" className="hover:text-purple-700 transition-colors">
-                                    Candidate Pipeline
+                                <Link to="/signup" className="hover:text-purple-700 transition-colors">
+                                    Recruiter Sign Up
                                 </Link>
                             </li>
                         </ul>

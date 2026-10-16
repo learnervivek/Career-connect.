@@ -95,7 +95,8 @@ export const login = async (req, res) => {
     const isPasswordMatch = await bcrypt.compare(password, user.password);
 
     // check role is correct or not and also verify password
-    if (!isPasswordMatch || role != user.role) {
+    const isRoleMatch = role === user.role || (role === "recruiter" && user.role === "admin");
+    if (!isPasswordMatch || !isRoleMatch) {
       return res.status(400).json({
         message: "Incorrect Credentials",
         success: false,

@@ -2,11 +2,12 @@
 
 # 🚀 Career-Connect
 
-### A modern full-stack job portal platform connecting students with top recruiters
+### The Unified Job Discovery, Placement Preparation & Interview Management Platform
 
 [![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=white)](https://react.dev)
 [![Node.js](https://img.shields.io/badge/Node.js-Express-339933?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org)
 [![MongoDB](https://img.shields.io/badge/MongoDB-Mongoose-47A248?style=for-the-badge&logo=mongodb&logoColor=white)](https://mongodb.com)
+[![TailwindCSS](https://img.shields.io/badge/Tailwind-CSS%20v4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com)
 [![Vercel](https://img.shields.io/badge/Deployed-Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://vercel.com)
 
 [Live Demo](#) · [Report Bug](https://github.com/learnervivek/Career-connect./issues) · [Request Feature](https://github.com/learnervivek/Career-connect./issues)
@@ -18,81 +19,97 @@
 ## 📋 Table of Contents
 
 - [About the Project](#-about-the-project)
-- [Features](#-features)
+- [Key Modules & Features](#-key-modules--features)
+  - [1. Job Discovery & Application Tracking](#1-job-discovery--application-tracking)
+  - [2. Company-Wise Placement Preparation Hub](#2-company-wise-placement-preparation-hub)
+  - [3. Integrated Interview Coordination](#3-integrated-interview-coordination)
+  - [4. Personalized Candidate Command Center](#4-personalized-candidate-command-center)
+  - [5. Recruiter & Administrator Management](#5-recruiter--administrator-management)
 - [Tech Stack](#-tech-stack)
 - [Project Structure](#-project-structure)
 - [Getting Started](#-getting-started)
 - [Environment Variables](#-environment-variables)
+- [Database Seeding (Preparation Hub)](#-database-seeding-preparation-hub)
+- [Testing & Quality Verification](#-testing--quality-verification)
 - [API Reference](#-api-reference)
 - [Deployment](#-deployment)
-- [Screenshots](#-screenshots)
+- [User Roles & Access Control](#-user-roles--access-control)
 
 ---
 
 ## 🌟 About the Project
 
-**Career-Connect** is a premium, full-stack job portal platform built for the modern job market. It bridges the gap between **job seekers (students)** and **recruiters**, offering a seamless experience inspired by platforms like LinkedIn Jobs, Indeed, and Wellfound.
+**Career-Connect** is a comprehensive full-stack career platform designed to bridge skill preparation, verified job discovery, and interview execution into a single, cohesive ecosystem.
 
-Students can discover opportunities, apply with a single click, and manage their profiles — while recruiters can post jobs, manage companies, and review applicants — all in one place.
+Unlike traditional job boards plagued by stale postings and disjointed communication, Career-Connect supports candidates through the entire career lifecycle:
+
+$$\text{Skill Preparation} \longrightarrow \text{Target Company Prioritization} \longrightarrow \text{1-Click Application} \longrightarrow \text{Interview Coordination} \longrightarrow \text{Offer Tracking}$$
+
+Candidates prepare for recruitment rounds with structured syllabi across 15+ top tech enterprises, track topic completion, and manage direct video interviews—while recruiters post transparent roles, screen applicants, and coordinate multi-round interviews with automated alerts.
 
 ---
 
-## ✨ Features
+## ✨ Key Modules & Features
 
-### 👨‍🎓 Student / Job Seeker
-- 🔍 **Smart Job Search** — Search by title, skills, company, and location
-- 🎛️ **Advanced Filters** — Filter by location, job type, salary range, and industry
-- 📄 **Job Details** — Rich formatted job descriptions with apply button
-- 👤 **Profile Management** — Update name, bio, skills, resume (PDF), and profile photo
-- 📸 **Profile Photo Upload** — Click avatar to instantly update photo (Cloudinary-powered)
-- 📋 **Application Tracker** — View all submitted applications and their statuses
-- 💼 **Browse Jobs** — Explore all available listings with category browsing
+### 1. Job Discovery & Application Tracking
+- 🔍 **Smart Multi-Attribute Search** — Search by title, required skills, company name, or city/remote location.
+- 💰 **Salary Transparency** — Upfront CTC/salary ranges with zero hidden compensation.
+- ⚡ **1-Click Fast Apply** — Submit profile credentials and formatted PDF resumes instantly.
+- 📊 **Real-Time Status Pipeline** — Track applications across `Pending`, `Accepted`, and `Rejected` statuses.
 
-### 🏢 Recruiter / Admin
-- 🏗️ **Company Management** — Create and configure company profiles with logos
-- 📝 **Job Posting** — Post detailed job listings with requirements, salary, and type
-- ✏️ **Edit & Delete Jobs** — Full CRUD control over job listings
-- 👥 **Applicant Review** — View all applicants for each job with resume access
-- 📊 **Status Management** — Update applicant status (Accepted / Rejected / Pending)
-- 🔒 **Protected Dashboard** — Role-based access control for recruiter routes
+### 2. Company-Wise Placement Preparation Hub
+- 🏢 **15 Top Initial Enterprises Supported**:
+  - **IT Services & Consulting**: TCS, Infosys, Wipro, HCLTech, Cognizant, Capgemini, Accenture, Tech Mahindra.
+  - **Product & Technology**: Microsoft, Google, Amazon, IBM, Oracle, Zoho Corporation, Qualcomm.
+- 🗺️ **Multi-Track Role Roadmaps** — Entry-level hiring tracks (e.g., TCS NQT Ninja/Digital/Prime, Infosys SE/SP, Google SDE-1, Amazon SDE-1, Qualcomm Embedded/Systems).
+- 📚 **Curated Learning Resources** — Topic-level links across DSA, Core CS (OS, DBMS, CN), System Design, and Aptitude.
+- 🏷️ **Resource Verification & Obsolete Flagging** — Distinguishes between official company materials, community resources, and unverified links.
+- 🔖 **Resource Bookmarking & Notes** — Save high-yield study sheets and record private topic notes.
 
-### 🌐 Platform
-- 🎨 **Premium Landing Page** — Modern hero section, company slider, category cards, and stats
-- 🔐 **JWT Authentication** — Secure login with HTTP-only cookies
-- ☁️ **Cloudinary Integration** — Cloud storage for profile photos and resumes
-- 📱 **Responsive Design** — Fully mobile-friendly across all screen sizes
-- ⚡ **Smooth Animations** — Framer Motion powered transitions throughout
+### 3. Integrated Interview Coordination
+- 📅 **Direct Interview Scheduling** — Recruiters schedule Technical, Coding, System Design, or HR rounds with custom meeting links (Google Meet, Zoom, MS Teams).
+- 🕒 **Conflict Prevention** — Automatic double-booking detection prevents overlapping active interview slots.
+- 🔄 **Candidate 1-Click Confirmation & Rescheduling** — Candidates confirm attendance or submit rescheduling requests with custom proposed dates and reasons.
+- 🔔 **Multi-Channel Notifications** — In-app notification bell and automated email alerts on scheduling milestones.
+- 📈 **Status Lifecycle**: `Scheduled` $\rightarrow$ `Confirmed` $\rightarrow$ `Reschedule Requested` $\rightarrow$ `Completed` $\rightarrow$ `Cancelled`.
+
+### 4. Personalized Candidate Command Center (`/my-preparation`)
+- 🎯 **Target Companies Manager** — Prioritize target employers (`Dream`, `High`, `Medium`) with target roles and custom notes.
+- 📊 **Active Roadmap Progress** — Persistent progress bars, completed vs remaining topic counters, and next recommended topic.
+- 📅 **Upcoming Interviews Widget** — View upcoming round details, scheduled times, and direct video links.
+- 📑 **Saved Learning Resources** — Categorized bookmark list with quick search and filters.
+
+### 5. Recruiter & Administrator Management
+- 💼 **Recruiter Portal (`/admin/jobs`)** — Post verified listings, review candidate resumes, and manage applicant status pipelines.
+- 🎙️ **Recruiter Interview Desk (`/admin/interviews`)** — View applicants ready for interviews, schedule rounds, and manage confirmations.
+- 🛠️ **Admin Preparation Manager (`/admin/preparation`)** — Add/edit companies, reorder roadmap stages and topics, curate learning resources, and archive obsolete tracks safely without corrupting user progress.
 
 ---
 
 ## 🛠️ Tech Stack
 
-### Frontend
-| Technology | Purpose |
-|---|---|
-| **React 19** | UI framework |
-| **Vite** | Build tool & dev server |
-| **Redux Toolkit** | Global state management |
-| **React Router v7** | Client-side routing |
-| **Tailwind CSS v4** | Utility-first styling |
-| **Framer Motion** | Animations & transitions |
-| **Axios** | HTTP client |
-| **Shadcn/ui** | UI component library |
-| **Lucide React** | Icon library |
-| **Sonner** | Toast notifications |
-| **React Markdown** | Render rich job descriptions |
+### Frontend (`Client/`)
+| Technology | Version / Tool | Purpose |
+|---|---|---|
+| **React** | v19 | Reactive component UI architecture |
+| **Vite** | v6 | Ultra-fast build tool & development server |
+| **Redux Toolkit** | v2.6 | Centralized state management (auth, jobs, roadmaps) |
+| **React Router** | v7 | Declarative client-side routing & protected routes |
+| **Tailwind CSS** | v4 | Modern utility-first responsive styling system |
+| **Lucide React** | Latest | Consistent UI iconography |
+| **Axios** | v1.8 | Authenticated REST client with cookie support |
+| **Sonner** | Latest | Toast notification feedback |
 
-### Backend
-| Technology | Purpose |
-|---|---|
-| **Node.js + Express** | REST API server |
-| **MongoDB + Mongoose** | Database & ODM |
-| **JWT** | Authentication tokens |
-| **bcryptjs** | Password hashing |
-| **Multer** | File upload middleware |
-| **Cloudinary** | Cloud media storage |
-| **dotenv** | Environment config |
-| **cookie-parser** | Cookie management |
+### Backend (`Server/`)
+| Technology | Version / Tool | Purpose |
+|---|---|---|
+| **Node.js** | v20+ / v26 (with compat) | Server runtime |
+| **Express.js** | v4.21 | RESTful API server & routing |
+| **MongoDB & Mongoose** | v8.12 | Scalable document database & schema modeling |
+| **JSON Web Tokens (JWT)** | v9.0 | Role-based authentication & HTTP-only cookies |
+| **bcryptjs** | v3.0 | Secure password hashing |
+| **Multer & DataURI** | LTS | File upload pipeline for resumes and avatars |
+| **Cloudinary** | v2.6 | Cloud storage for user media assets |
 
 ---
 
@@ -101,75 +118,79 @@ Students can discover opportunities, apply with a single click, and manage their
 ```
 career-connect/
 │
-├── Client/                          # React frontend (Vite)
-│   ├── public/
+├── Client/                                # Frontend React (Vite)
 │   ├── src/
 │   │   ├── components/
-│   │   │   ├── admin/               # Recruiter dashboard pages
-│   │   │   │   ├── AdminJobs.jsx
-│   │   │   │   ├── AdminJobsTable.jsx
-│   │   │   │   ├── Companies.jsx
-│   │   │   │   ├── CompanyCreate.jsx
-│   │   │   │   ├── CompanySetup.jsx
-│   │   │   │   ├── EditJob.jsx
-│   │   │   │   ├── JobApplicants.jsx
-│   │   │   │   ├── PostJob.jsx
+│   │   │   ├── admin/                    # Recruiter & Admin Management
+│   │   │   │   ├── preparation/          # Admin Preparation Hub
+│   │   │   │   │   └── AdminPreparationDashboard.jsx
+│   │   │   │   ├── AdminJobs.jsx         # Manage job postings
+│   │   │   │   ├── Companies.jsx         # Manage company profiles
+│   │   │   │   ├── JobApplicants.jsx     # Screen applicant resumes
+│   │   │   │   ├── PostJob.jsx           # Create job listings
+│   │   │   │   ├── RecruiterInterviews.jsx # Recruiter interview desk
 │   │   │   │   └── ProtectedRoute.jsx
-│   │   │   ├── auth/
-│   │   │   │   ├── Login.jsx
-│   │   │   │   └── Signup.jsx
-│   │   │   ├── shared/
+│   │   │   ├── preparation/              # Candidate Preparation Hub
+│   │   │   │   ├── CompanyPreparationPage.jsx # Catalog with search & filters
+│   │   │   │   ├── CompanyDetailsPage.jsx     # Company hiring tracks
+│   │   │   │   ├── RoadmapDetailsPage.jsx     # Interactive stages & topics
+│   │   │   │   ├── MyPreparationDashboard.jsx # Personalized command center
+│   │   │   │   ├── CompanyCard.jsx
+│   │   │   │   └── ResourceList.jsx
+│   │   │   ├── shared/                   # Navbar, Footer, Notifications
 │   │   │   │   ├── Navbar.jsx
-│   │   │   │   └── Footer.jsx
-│   │   │   ├── ui/                  # Reusable UI components
-│   │   │   ├── Home.jsx             # Landing page
-│   │   │   ├── HeroSection.jsx
-│   │   │   ├── Jobs.jsx             # Job listings with filters
-│   │   │   ├── JobDescription.jsx   # Job detail page
-│   │   │   ├── Profile.jsx          # Student profile page
-│   │   │   ├── UpdateProfileDialog.jsx
-│   │   │   └── Browse.jsx
-│   │   ├── hooks/                   # Custom React hooks
-│   │   ├── redux/                   # Redux store & slices
-│   │   │   ├── store.js
-│   │   │   ├── authSlice.js
-│   │   │   ├── jobSlice.js
-│   │   │   ├── companySlice.js
-│   │   │   └── applicationSlice.js
-│   │   └── utils/
-│   │       ├── constant.js          # API endpoint constants
-│   │       └── filterUtils.js       # Job filter logic
-│   ├── index.html
-│   ├── vercel.json
+│   │   │   │   ├── Footer.jsx
+│   │   │   │   └── NotificationBell.jsx
+│   │   │   ├── CandidateInterviews.jsx   # Candidate interview management
+│   │   │   ├── LandingPreparationHub.jsx # Dynamic landing preparation preview
+│   │   │   ├── LandingInterviewSection.jsx # Landing interview workflow timeline
+│   │   │   ├── LandingCandidateDashboardPreview.jsx # Landing dashboard mockup
+│   │   │   ├── LandingRecruiterSection.jsx # Landing employer features
+│   │   │   ├── HeroSection.jsx           # Unified hero with dual search & CTAs
+│   │   │   ├── Home.jsx                  # Main landing page
+│   │   │   ├── Jobs.jsx                  # Job catalogue & search
+│   │   │   ├── JobDescription.jsx        # Job detail view
+│   │   │   └── Profile.jsx               # Candidate profile & resume
+│   │   ├── redux/                        # Redux store & state slices
+│   │   └── utils/constant.js             # API endpoint configuration
 │   └── vite.config.js
 │
-├── Server/                          # Express backend
+├── Server/                                # Backend Express REST API
 │   ├── controllers/
-│   │   ├── user.controllers.js
-│   │   ├── job.controllers.js
-│   │   ├── company.controllers.js
-│   │   └── application.controllers.js
+│   │   ├── preparation.controllers.js    # Public preparation catalog API
+│   │   ├── progress.controllers.js       # Topic progress & target companies
+│   │   ├── adminPreparation.controllers.js # Admin roadmap & company curation
+│   │   ├── interview.controllers.js      # Interview scheduling & coordination
+│   │   ├── user.controllers.js           # Auth & profile management
+│   │   ├── job.controllers.js            # Job management
+│   │   └── company.controllers.js        # Recruiter company profiles
 │   ├── middlewares/
-│   │   ├── authUser.js              # JWT auth middleware
-│   │   └── multer.js                # File upload middleware
+│   │   ├── authUser.js                   # JWT authentication middleware
+│   │   └── checkRole.js                  # Candidate, Recruiter, Admin authorization
 │   ├── models/
-│   │   ├── user.model.js
-│   │   ├── job.models.js
-│   │   ├── company.models.js
-│   │   └── application.models.js
+│   │   ├── company.models.js             # Company schema (tiers & preparation tracks)
+│   │   ├── roadmap.models.js             # Roadmaps, stages & stable topic IDs
+│   │   ├── preparationResource.models.js # Curated learning resources
+│   │   ├── userRoadmapProgress.models.js # Individual user topic completion & notes
+│   │   ├── userTargetCompany.models.js   # User target company priorities
+│   │   ├── interview.models.js           # Interview scheduling & statuses
+│   │   ├── job.models.js                 # Job opportunities
+│   │   └── application.models.js         # Candidate job applications
 │   ├── routes/
-│   │   ├── user.routes.js
-│   │   ├── job.routes.js
-│   │   ├── company.routes.js
-│   │   └── application.routes.js
-│   ├── utils/
-│   │   ├── db.js                    # MongoDB cached connection
-│   │   ├── cloudinary.js
-│   │   └── datauri.js
-│   ├── index.js                     # Express app entry point
-│   └── vercel.json
+│   │   ├── preparation.routes.js         # /api/v1/preparation
+│   │   ├── progress.routes.js            # /api/v1/progress
+│   │   ├── adminPreparation.routes.js    # /api/v1/admin/preparation
+│   │   ├── interview.routes.js           # /api/v1/interviews
+│   │   └── job.routes.js                 # /api/v1/job
+│   ├── scripts/
+│   │   └── seed_preparation_hub.js       # Idempotent 15-company seeder
+│   ├── test_full_quality_review.js       # 17-test master quality review suite
+│   ├── test_interview_integration.js     # 20-test interview regression suite
+│   ├── test_preparation_hub.js           # Foundational schema verification
+│   ├── test_progress_tracking.js         # Progress & target companies tests
+│   ├── test_admin_preparation.js         # Admin management test suite
+│   └── index.js                          # Server entry point
 │
-├── .gitignore
 └── README.md
 ```
 
@@ -178,202 +199,189 @@ career-connect/
 ## 🚀 Getting Started
 
 ### Prerequisites
-
-Make sure you have the following installed:
-
-- [Node.js](https://nodejs.org) v18+
-- [npm](https://npmjs.com) v9+
-- A [MongoDB Atlas](https://cloud.mongodb.com) cluster
-- A [Cloudinary](https://cloudinary.com) account
+- **Node.js** v18+ (tested up to v26 with included `node-compat.cjs`)
+- **npm** v9+
+- A running **MongoDB** database (Local or MongoDB Atlas)
+- A **Cloudinary** account (for image & resume uploads)
 
 ### 1. Clone the Repository
-
 ```bash
 git clone https://github.com/learnervivek/Career-connect..git
 cd Career-connect.
 ```
 
-### 2. Setup the Backend
-
+### 2. Backend Setup
 ```bash
 cd Server
 npm install
 ```
 
-Create a `.env` file in the `Server/` directory:
-
+Create `Server/.env`:
 ```env
-MONGODB_URI=your_mongodb_connection_string
 PORT=8000
+MONGODB_URI=your_mongodb_connection_string
 SECRET_KEY=your_jwt_secret_key
-CLOUDINARY_API_KEY=your_cloudinary_api_key
-CLOUDINARY_SECRET_KEY=your_cloudinary_secret_key
-CLOUDINARY_NAME=your_cloudinary_cloud_name
 FRONTEND_URL=http://localhost:5173
+CLOUDINARY_NAME=your_cloudinary_name
+CLOUDINARY_API_KEY=your_cloudinary_key
+CLOUDINARY_SECRET_KEY=your_cloudinary_secret
 NODE_ENV=development
 ```
 
-Start the backend server:
+Run database seeding (idempotent bootstrap):
+```bash
+npm run seed:prep
+```
 
+Start the backend server:
 ```bash
 npm run dev
 ```
+The server starts at `http://localhost:8000`.
 
-The server runs at `http://localhost:8000`
-
-### 3. Setup the Frontend
-
+### 3. Frontend Setup
 ```bash
 cd ../Client
 npm install
 ```
 
-Create a `.env` file in the `Client/` directory:
-
+Create `Client/.env`:
 ```env
 VITE_BACKEND_URL=http://localhost:8000
 ```
 
-Start the development server:
-
+Start the Vite development server:
 ```bash
 npm run dev
 ```
-
-The app runs at `http://localhost:5173`
+The client starts at `http://localhost:5173`.
 
 ---
 
-## 🔐 Environment Variables
+## 🏢 Database Seeding (Preparation Hub)
 
-### Backend (`Server/.env`)
+To bootstrap or refresh the 15 initial companies and starter roadmaps:
 
-| Variable | Description | Required |
+```bash
+cd Server
+npm run seed:prep
+```
+
+### Seeding Guarantees:
+1. **Full Idempotency**: Matches companies and roadmaps by unique `slug` and resources by `url`. Running multiple times never creates duplicates.
+2. **User Progress Preserved**: Candidate completion records (`UserRoadmapProgress`) and target companies (`UserTargetCompany`) are never overwritten.
+3. **Deterministic Topic IDs**: Topics maintain stable string IDs across updates, preserving progress calculations if stages are reordered.
+4. **Recruiter Profiles Retained**: Existing recruiter job postings and company links are safely preserved.
+
+---
+
+## 🧪 Testing & Quality Verification
+
+All features are covered by automated integration test suites:
+
+| Command | Suite | Workflows Verified |
 |---|---|---|
-| `MONGODB_URI` | MongoDB Atlas connection string | ✅ |
-| `SECRET_KEY` | JWT signing secret | ✅ |
-| `CLOUDINARY_API_KEY` | Cloudinary API key | ✅ |
-| `CLOUDINARY_SECRET_KEY` | Cloudinary API secret | ✅ |
-| `CLOUDINARY_NAME` | Cloudinary cloud name | ✅ |
-| `FRONTEND_URL` | Allowed frontend origin for CORS | ✅ |
-| `NODE_ENV` | `development` or `production` | ✅ |
-| `PORT` | Server port (default: 8000) | ❌ |
+| `npm run test:review` | **Master Quality Review** | 17 workflows: Seeding, catalog browsing, roadmap stages, topic progress, 2-user isolation, target companies, admin roadmap reordering, 401/403 security checks, private notes. |
+| `npm test` | **Interview & Job Portal** | 20 workflows: Scheduling, candidate confirmations, reschedule requests, cancellations, conflict prevention, recruiter authorization. |
+| `npm run test:prep` | **Schema Foundations** | 10 workflows: Initial 15 companies, roadmap relationships, resource populations. |
+| `npm run test:progress` | **Candidate Progress** | 10 workflows: Percentage recalculations, target company CRUD, unchecking topics. |
+| `npm run test:admin` | **Admin Hub Management** | 13 workflows: Company/roadmap creation, archive warnings, stage reordering. |
+| `npm run test:resources` | **Learning Resources** | Categories, resource types, bookmarking, private notes, obsolete flagging. |
 
-### Frontend (`Client/.env`)
-
-| Variable | Description | Required |
-|---|---|---|
-| `VITE_BACKEND_URL` | Backend API base URL | ✅ |
-
-> ⚠️ Never commit `.env` files to version control. They are already listed in `.gitignore`.
+To run the master quality suite:
+```bash
+cd Server
+npm run test:review
+```
 
 ---
 
 ## 📡 API Reference
 
-### Auth — `/api/v1/user`
-
+### 1. Preparation Hub (`/api/v1/preparation`)
 | Method | Endpoint | Description | Auth |
 |---|---|---|---|
-| `POST` | `/register` | Register a new user | ❌ |
-| `POST` | `/login` | Login and get token cookie | ❌ |
-| `POST` | `/logout` | Clear auth cookie | ❌ |
-| `POST` | `/profile/update` | Update profile info & resume | ✅ |
-| `POST` | `/profile/photo` | Update profile photo | ✅ |
+| `GET` | `/companies` | Get catalog with category filter & search | Public |
+| `GET` | `/companies/:slugOrId` | Get company details & available roadmaps | Public |
+| `GET` | `/roadmaps/:slugOrId` | Get ordered stages, topics & resources | Public |
+| `POST` | `/resources/:id/bookmark` | Bookmark / unbookmark learning resource | Candidate |
+| `GET` | `/my-resource-bookmarks` | Get candidate's saved resources | Candidate |
 
-### Jobs — `/api/v1/job`
-
+### 2. Personalized Progress (`/api/v1/progress`, `/api/v1/my-*`)
 | Method | Endpoint | Description | Auth |
 |---|---|---|---|
-| `GET` | `/get` | Get all jobs (with search) | ❌ |
-| `GET` | `/getadminjobs` | Get recruiter's posted jobs | ✅ |
-| `GET` | `/get/:id` | Get single job details | ❌ |
-| `POST` | `/post` | Post a new job | ✅ |
-| `PUT` | `/update/:id` | Edit an existing job | ✅ |
-| `DELETE` | `/delete/:id` | Delete a job | ✅ |
+| `GET` | `/progress/:roadmapId` | Get user progress, completed topics & % | Candidate |
+| `POST` | `/progress/:roadmapId/start` | Start tracking a roadmap | Candidate |
+| `PUT` | `/progress/:roadmapId/topics/:topicId` | Toggle topic completion (true/false) | Candidate |
+| `POST` | `/progress/:roadmapId/topics/:topicId/notes` | Save private study notes for topic | Candidate |
+| `GET` | `/my-preparation` | Dashboard: Target companies & active tracks | Candidate |
+| `POST` | `/my-target-companies` | Add company to target list with priority | Candidate |
+| `DELETE` | `/my-target-companies/:id` | Remove company from target list | Candidate |
 
-### Companies — `/api/v1/company`
-
+### 3. Interview Coordination (`/api/v1/interviews`)
 | Method | Endpoint | Description | Auth |
 |---|---|---|---|
-| `POST` | `/register` | Create a new company | ✅ |
-| `GET` | `/get` | Get all companies for recruiter | ✅ |
-| `GET` | `/get/:id` | Get single company | ✅ |
-| `PUT` | `/update/:id` | Update company info | ✅ |
+| `GET` | `/candidate` | Get candidate's scheduled interviews | Candidate |
+| `PUT` | `/:id/confirm` | Confirm attendance for scheduled interview | Candidate |
+| `PUT` | `/:id/reschedule-request` | Request rescheduling with proposed slot | Candidate |
+| `POST` | `/schedule` | Schedule interview for accepted applicant | Recruiter |
+| `GET` | `/recruiter` | Get recruiter's coordinated interviews | Recruiter |
+| `PUT` | `/:id/reschedule` | Reschedule interview date/time | Recruiter |
+| `PUT` | `/:id/cancel` | Cancel interview with reason | Recruiter |
 
-### Applications — `/api/v1/application`
-
+### 4. Admin Preparation Management (`/api/v1/admin/preparation`)
 | Method | Endpoint | Description | Auth |
 |---|---|---|---|
-| `POST` | `/apply/:id` | Apply to a job | ✅ |
-| `GET` | `/get` | Get student's applications | ✅ |
-| `GET` | `/getapplicants/:id` | Get applicants for a job | ✅ |
-| `PUT` | `/status/:id/update` | Update application status | ✅ |
+| `GET` | `/companies` | Get company management catalog | Admin |
+| `POST` | `/companies` | Add new preparation company | Admin |
+| `PUT` | `/companies/:id` | Update company details & hiring tracks | Admin |
+| `POST` | `/roadmaps` | Create roadmap with stages & topics | Admin |
+| `PUT` | `/roadmaps/:id` | Reorder topics & edit syllabus safely | Admin |
+| `PATCH` | `/roadmaps/:id/status` | Publish, Draft, or Archive roadmap | Admin |
+
+### 5. Jobs & Applications (`/api/v1/job`, `/api/v1/application`)
+| Method | Endpoint | Description | Auth |
+|---|---|---|---|
+| `GET` | `/job/get` | Search & filter verified jobs | Public |
+| `POST` | `/job/post` | Post a new job opportunity | Recruiter |
+| `POST` | `/application/apply/:id` | 1-Click apply to job | Candidate |
+| `GET` | `/application/get` | Get candidate application history | Candidate |
+| `PUT` | `/application/status/:id/update` | Update applicant status | Recruiter |
+
+---
+
+## 👥 User Roles & Access Control
+
+| Feature / Action | Student / Candidate | Recruiter | Admin |
+|---|:---:|:---:|:---:|
+| Search & Browse Jobs | ✅ | ✅ | ✅ |
+| 1-Click Apply & Resume Upload | ✅ | ❌ | ❌ |
+| Company Preparation Roadmaps | ✅ | ✅ | ✅ |
+| Topic Progress & Target Companies | ✅ | ❌ | ❌ |
+| Confirm / Reschedule Interviews | ✅ | ❌ | ❌ |
+| Post Jobs & Review Resumes | ❌ | ✅ | ✅ |
+| Schedule & Manage Interviews | ❌ | ✅ | ✅ |
+| Curate Companies & Roadmaps | ❌ | ❌ | ✅ |
 
 ---
 
 ## ☁️ Deployment
 
-Career-Connect is deployed as two separate projects on **Vercel**:
+Career-Connect is architected for deployment across modern cloud platforms:
 
-| Service | Platform | Root Directory |
-|---|---|---|
-| Frontend | Vercel | `Client/` |
-| Backend | Vercel (Serverless) | `Server/` |
-
-### Key deployment notes:
-- Set `NODE_ENV=production` on the backend — disables `app.listen()` for serverless compatibility
-- The backend uses a **cached MongoDB connection** pattern to handle Vercel serverless cold starts efficiently
-- MongoDB Atlas must allow connections from **all IPs** (`0.0.0.0/0`) since Vercel uses dynamic IPs
-- Both `vercel.json` files are pre-configured — set environment variables in the Vercel dashboard:
-  - Backend: set `FRONTEND_URL` to the deployed frontend origin, without a trailing slash, and set `NODE_ENV=production`.
-  - Frontend: set `VITE_BACKEND_URL` to the public backend origin, without `/api/v1` and without a trailing slash. For example, `https://your-backend.vercel.app`.
-  - Redeploy the frontend after changing `VITE_BACKEND_URL`; Vite embeds `VITE_*` values during the build.
-- Do not use `http://localhost:8000` as the deployed frontend's `VITE_BACKEND_URL`. That address points to the visitor's own computer.
-- If the frontend and backend use different domains, the backend deployment must allow public access; Vercel Deployment Protection must not block browser API requests.
-
-For full step-by-step deployment instructions, see [Vercel Deployment Guide](#).
-
----
-
-## 👥 User Roles
-
-### Student
-- Register / Login with `role: student`
-- Browse and search jobs
-- Apply to jobs and track application status
-- Manage profile (photo, resume, bio, skills)
-
-### Recruiter
-- Register / Login with `role: recruiter`
-- Create and manage company profile
-- Post, edit, and delete job listings
-- View applicants and update their status
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome! To contribute:
-
-1. Fork the repository
-2. Create your feature branch: `git checkout -b feature/amazing-feature`
-3. Commit your changes: `git commit -m 'Add amazing feature'`
-4. Push to the branch: `git push origin feature/amazing-feature`
-5. Open a Pull Request
+- **Frontend**: Deployed on **Vercel** (`Client/` root directory). Set `VITE_BACKEND_URL` to your production API origin.
+- **Backend**: Deployed on **Vercel Serverless** or **Render/Railway** (`Server/` root directory). Ensure `FRONTEND_URL` matches the deployed client origin.
 
 ---
 
 ## 📄 License
 
-This project is open source and available under the [MIT License](LICENSE).
-
----
+This project is licensed under the [MIT License](LICENSE).
 
 <div align="center">
 
 Made with ❤️ by [Vivek Kumar](https://github.com/learnervivek)
 
-⭐ Star this repo if you found it helpful!
+⭐ Star this repository if Career-Connect helped you!
 
 </div>

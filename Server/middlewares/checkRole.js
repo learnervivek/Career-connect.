@@ -44,5 +44,6 @@ export const authorizeRole = (...allowedRoles) => {
     };
 };
 
-export const isRecruiter = authorizeRole("recruiter");
+export const isRecruiter = authorizeRole("recruiter", "admin");
 export const isCandidate = authorizeRole("student");
+export const isAdmin = authorizeRole("admin", "recruiter");

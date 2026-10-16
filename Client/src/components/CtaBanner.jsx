@@ -1,7 +1,7 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-import { ArrowRight, Sparkles, Building2, UserPlus, CheckCircle2 } from 'lucide-react'
+import { ArrowRight, Sparkles, Building2, UserPlus, CheckCircle2, BookOpen } from 'lucide-react'
 
 const CtaBanner = () => {
     const navigate = useNavigate()
@@ -22,28 +22,30 @@ const CtaBanner = () => {
                         </div>
 
                         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight">
-                            Find Your Dream Job. <br className="hidden sm:inline" />
-                            Build Your Future with Confidence.
+                            Your Career. Your Preparation. <br className="hidden sm:inline" />
+                            Your Next Opportunity.
                         </h2>
 
                         <p className="text-base sm:text-lg text-purple-100 max-w-2xl mx-auto leading-relaxed">
-                            Join thousands of ambitious developers, designers, and managers securing top engineering and product roles on Career-Connect.
+                            Join thousands of ambitious developers, engineers, and tech teams using Career Connect to discover verified jobs, master company roadmaps, and coordinate interviews effortlessly.
                         </p>
 
                         {/* CTA Buttons */}
                         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
                             <button
-                                onClick={() => navigate(user ? '/jobs' : '/signup')}
-                                className="w-full sm:w-auto bg-white text-[#431B7D] hover:bg-gray-100 font-bold px-7 py-3.5 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer group"
+                                type="button"
+                                onClick={() => navigate(user ? '/preparation' : '/signup')}
+                                className="w-full sm:w-auto bg-white text-[#431B7D] hover:bg-gray-100 font-bold px-7 py-3.5 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer group text-sm"
                             >
-                                <UserPlus className="w-4 h-4 text-purple-600" />
-                                <span>{user ? 'Explore Jobs Now' : 'Create Free Candidate Account'}</span>
+                                <BookOpen className="w-4 h-4 text-purple-600" />
+                                <span>{user ? 'Explore Preparation Hub' : 'Create Free Candidate Account'}</span>
                                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                             </button>
 
                             <button
+                                type="button"
                                 onClick={() => navigate(user?.role === 'recruiter' ? '/admin/jobs' : '/signup')}
-                                className="w-full sm:w-auto bg-white/10 hover:bg-white/20 text-white font-medium border border-white/25 px-6 py-3.5 rounded-xl backdrop-blur-sm transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer"
+                                className="w-full sm:w-auto bg-white/10 hover:bg-white/20 text-white font-medium border border-white/25 px-6 py-3.5 rounded-xl backdrop-blur-sm transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer text-sm"
                             >
                                 <Building2 className="w-4 h-4 text-purple-200" />
                                 <span>Hiring Talent? Post a Job</span>
@@ -54,15 +56,15 @@ const CtaBanner = () => {
                         <div className="flex items-center justify-center flex-wrap gap-6 pt-6 text-xs text-purple-200">
                             <div className="flex items-center gap-1.5">
                                 <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                                <span>100% Free for Job Seekers</span>
+                                <span>15+ Top Company Roadmaps</span>
                             </div>
                             <div className="flex items-center gap-1.5">
                                 <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                                <span>Verified Companies Only</span>
+                                <span>100% Free for Candidates</span>
                             </div>
                             <div className="flex items-center gap-1.5">
                                 <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                                <span>Direct Recruiter Review</span>
+                                <span>Direct Video Interview Scheduling</span>
                             </div>
                         </div>
                     </div>

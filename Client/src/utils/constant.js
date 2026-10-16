@@ -13,6 +13,11 @@ export const APPLICANT_API_END_POINT = `${backend_url}/api/v1/application`
 export const COMPANY_API_END_POINT = `${backend_url}/api/v1/company`
 export const INTERVIEW_API_END_POINT = `${backend_url}/api/v1/interviews`
 export const NOTIFICATION_API_END_POINT = `${backend_url}/api/v1/notifications`
+export const PREPARATION_API_END_POINT = `${backend_url}/api/v1/preparation`
+export const PROGRESS_API_END_POINT = `${backend_url}/api/v1/progress`
+export const MY_PREPARATION_API_END_POINT = `${backend_url}/api/v1/my-preparation`
+export const MY_TARGET_COMPANIES_API_END_POINT = `${backend_url}/api/v1/my-target-companies`
+export const ADMIN_PREPARATION_API_END_POINT = `${backend_url}/api/v1/admin/preparation`
 
 // export const USER_API_END_POINT = "http://localhost:8000/api/v1/user"
 // export const JOB_API_END_POINT = "http://localhost:8000/api/v1/job"

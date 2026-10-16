@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
 import { Button } from '../ui/button'
 import { Avatar, AvatarImage } from '../ui/avatar'
-import { Bookmark, BriefcaseBusiness, BuildingIcon, Calendar, Home, HomeIcon, LogOut, Menu, MenuIcon, SearchCheck, User2 } from 'lucide-react'
+import { Bookmark, BriefcaseBusiness, BuildingIcon, Calendar, Home, HomeIcon, LogOut, Menu, MenuIcon, SearchCheck, User2, BookOpen, Sparkles } from 'lucide-react'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'sonner'
 import axios from 'axios'
@@ -54,12 +54,13 @@ const Navbar = () => {
                 <div className='flex items-center gap-12 max-sm:gap-5'>
                     <ul className='flex font-medium items-center gap-5 max-sm:hidden'>
                         {
-                            user && user.role === "recruiter"
+                            user && (user.role === "recruiter" || user.role === "admin")
                                 ?
                                 <>
                                     <li><Link to="/admin/companies">Companies</Link></li>
                                     <li><Link to="/admin/jobs">Jobs</Link></li>
                                     <li><Link to="/admin/interviews">Interviews</Link></li>
+                                    <li><Link to="/admin/preparation">Prep Hub</Link></li>
                                 </>
                                 : (
                                     <>
@@ -67,6 +68,7 @@ const Navbar = () => {
                                         <li onClick={resetQuery}><Link to="/jobs">Jobs</Link></li>
                                         <li onClick={resetQuery}><Link to="/browse">Browse</Link></li>
                                         <li onClick={resetQuery}><Link to="/interviews">Interviews</Link></li>
+                                        <li onClick={resetQuery}><Link to="/preparation">Preparation Hub</Link></li>
                                     </>
                                 )
                         }
@@ -135,7 +137,21 @@ const Navbar = () => {
                                                                 <Calendar className="w-4 h-4 ml-1 text-purple-600" />
                                                                 <Button className="cursor-pointer" variant="link"><Link to="/interviews">My Interviews</Link></Button>
                                                             </div>
+                                                            <div className='flex w-fit items-center gap-2 cursor-pointer'>
+                                                                <Sparkles className="w-4 h-4 ml-1 text-[#6A38C2]" />
+                                                                <Button className="cursor-pointer" variant="link"><Link to="/preparation/dashboard">My Preparation</Link></Button>
+                                                            </div>
                                                         </>
+                                                    )
+                                                }
+
+                                                {
+                                                    user && (user?.role === "recruiter" || user?.role === "admin") &&
+                                                    (
+                                                        <div className='flex w-fit items-center gap-2 cursor-pointer'>
+                                                            <BookOpen className="w-4 h-4 ml-1 text-[#6A38C2]" />
+                                                            <Button className="cursor-pointer" variant="link"><Link to="/admin/preparation">Prep Hub Management</Link></Button>
+                                                        </div>
                                                     )
                                                 }
 
@@ -162,7 +178,7 @@ const Navbar = () => {
                             <PopoverContent className="w-80">
                                 <div>
                                     {
-                                        user && user.role === "recruiter"
+                                        user && (user.role === "recruiter" || user.role === "admin")
                                             ?
                                             <div className='flex flex-col gap-3'>
                                                 <div onClick={() => navigate("/admin/companies")} className='flex items-center gap-3'>
@@ -178,6 +194,11 @@ const Navbar = () => {
                                                 <div onClick={() => navigate("/admin/interviews")} className='flex items-center gap-3 cursor-pointer'>
                                                     <Calendar className="size-5" />
                                                     <p className='text-lg font-medium'>Interviews</p>
+                                                </div>
+
+                                                <div onClick={() => navigate("/admin/preparation")} className='flex items-center gap-3 cursor-pointer'>
+                                                    <BookOpen className="size-5" />
+                                                    <p className='text-lg font-medium'>Prep Hub</p>
                                                 </div>
                                             </div>
                                             : (
@@ -211,6 +232,11 @@ const Navbar = () => {
                                                         <div onClick={() => navigate("/interviews")} className='flex items-center gap-3 cursor-pointer'>
                                                             <Calendar className="size-5" />
                                                             <p className='text-lg font-medium'>Interviews</p>
+                                                        </div>
+
+                                                        <div onClick={() => navigate("/preparation")} className='flex items-center gap-3 cursor-pointer'>
+                                                            <BookOpen className="size-5" />
+                                                            <p className='text-lg font-medium'>Preparation Hub</p>
                                                         </div>
                                                     </div>
 

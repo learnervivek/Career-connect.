@@ -5,6 +5,12 @@
   "type": "module",
   "scripts": {
     "test": "NODE_ENV=test node --require ./node-compat.cjs test_interview_integration.js",
+    "test:prep": "NODE_ENV=test node --require ./node-compat.cjs test_preparation_hub.js",
+    "test:progress": "NODE_ENV=test node --require ./node-compat.cjs test_progress_tracking.js",
+    "test:admin": "NODE_ENV=test node --require ./node-compat.cjs test_admin_preparation.js",
+    "test:resources": "NODE_ENV=test node --require ./node-compat.cjs test_learning_resources.js",
+    "test:review": "NODE_ENV=test node --require ./node-compat.cjs test_full_quality_review.js",
+    "seed:prep": "node --require ./node-compat.cjs scripts/seed_preparation_hub.js",
     "dev": "nodemon --require ./node-compat.cjs -e js,json,env index.js"
   },
   "author": "Shubham Kumar",

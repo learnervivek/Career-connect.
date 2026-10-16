@@ -39,7 +39,33 @@ const authUser = async (req, res, next) => {
             success: false,
         });
     }
-}
+};
 
+export const optionalAuthUser = async (req, res, next) => {
+    try {
+        let token = req.cookies?.token;
+        if (!token && req.headers.authorization) {
+            if (req.headers.authorization.startsWith("Bearer ")) {
+                token = req.headers.authorization.split(" ")[1];
+            } else {
+                token = req.headers.authorization;
+            }
+        }
+
+        if (token) {
+            try {
+                const decode = await jwt.verify(token, process.env.SECRET_KEY);
+                if (decode) {
+                    req.id = decode.userId;
+                }
+            } catch (err) {
+                // Ignore token error for optional auth
+            }
+        }
+        next();
+    } catch (error) {
+        next();
+    }
+};
 
 export default authUser;
