@@ -137,7 +137,7 @@ const CompanyPreparationPage = () => {
     };
 
     // Category counts summary
-    const categoryCounts = useMemo(() => {
+    const _categoryCounts = useMemo(() => {
         const itCount = companies.filter((c) => c.category === "IT Services & Consulting").length;
         const prodCount = companies.filter((c) => c.category === "Product & Technology").length;
         return {

@@ -359,9 +359,62 @@ npm run test:review
 | Company Preparation Roadmaps | ✅ | ✅ | ✅ |
 | Topic Progress & Target Companies | ✅ | ❌ | ❌ |
 | Confirm / Reschedule Interviews | ✅ | ❌ | ❌ |
+| Track Applications & Status Timeline | ✅ | ❌ | ❌ |
+| Withdraw Own Active Applications | ✅ | ❌ | ❌ |
 | Post Jobs & Review Resumes | ❌ | ✅ | ✅ |
+| Update Application Status & Candidate Notes | ❌ | ✅ | ✅ |
 | Schedule & Manage Interviews | ❌ | ✅ | ✅ |
 | Curate Companies & Roadmaps | ❌ | ❌ | ✅ |
+
+---
+
+## 📬 Job Application Tracking & Email Notification System
+
+Career-Connect provides a transparent application tracking dashboard for candidates and an applicant management pipeline for recruiters with automated transactional email notifications.
+
+### 🌟 Candidate Features
+- **Dedicated My Applications Page** (`/my-applications`): Searchable, filterable dashboard with live counter metrics (Total, Under Review, Shortlisted, Selected, Rejected).
+- **Cards & Data Table Views**: Switch between rich glassmorphic cards and a data table.
+- **Application Reference IDs**: Formatted identifiers (`APP-XXXXXX`) for tracking and correspondence.
+- **Chronological Progress Timeline**: Interactive stepper and modal showing every recorded milestone, date, and candidate-visible recruiter feedback.
+- **Integrated Interview Rounds**: Directly linked scheduled interviews and meeting links alongside application progress.
+- **Candidate Withdrawal**: Safe withdrawal workflow for active applications.
+
+### 💼 Recruiter Applicant Pipeline
+- **Pipeline Status Management**: Transition applicants through `Applied` → `Under Review` → `Shortlisted` → `Interview Scheduled` → `Selected` / `Rejected`.
+- **Candidate-Visible Feedback**: Add personalized next-step instructions or constructive feedback notes when updating applicant status.
+- **Audit & History Inspection**: Open applicant timeline modal to inspect all previous status changes and timestamped notes.
+
+### 📧 Automated Email Notifications
+Automated responsive HTML transactional emails with plain-text fallbacks sent via Nodemailer (or safely simulated in development):
+- **Application Submitted**: Sent immediately upon saving an application with job title, company, reference ID, and dashboard link.
+- **Application Shortlisted**: Sent when moved to Shortlisted/Accepted with next steps guidance.
+- **Application Selected**: Outcome notification with congratulations and next steps.
+- **Application Rejected**: Respectful status update with optional recruiter-approved feedback note and link to explore other openings.
+- **Application Under Review**: Review notification.
+
+#### Environment Variables Configuration:
+```env
+# Supported SMTP Variables (both EMAIL_* and SMTP_* aliases supported):
+EMAIL_HOST="smtp.gmail.com" # or SMTP_HOST
+EMAIL_PORT=587              # or SMTP_PORT
+EMAIL_SECURE=false          # or SMTP_SECURE
+EMAIL_USER="your-email@example.com" # or SMTP_USER
+EMAIL_PASS="your-app-password"      # or SMTP_PASS
+EMAIL_FROM='"Career Connect" <notifications@careerconnect.com>' # or SMTP_FROM
+FRONTEND_URL="http://localhost:5173"
+```
+*Note: If unconfigured, the system automatically runs in simulated delivery mode without failing requests or blocking operations.*
+
+### 🧪 Automated Test Suites
+Run the dedicated test suites:
+```bash
+# Application Tracking & Notification Integration Tests (14/14 tests)
+npm run test:app
+
+# Interview Integration Tests (20/20 tests)
+npm test
+```
 
 ---
 

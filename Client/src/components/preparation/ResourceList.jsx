@@ -93,7 +93,7 @@ const ResourceList = ({
     practiceProblems = [],
     bookmarkedResourceIds = [],
     onToggleBookmark,
-    isAuthenticated = false,
+    isAuthenticated: _isAuthenticated = false,
 }) => {
     const hasResources = Array.isArray(resources) && resources.length > 0;
     const hasProblems = Array.isArray(practiceProblems) && practiceProblems.length > 0;

@@ -6,7 +6,14 @@ export const NOTIFICATION_TYPES = [
     "RESCHEDULE_REQUESTED",
     "INTERVIEW_RESCHEDULED",
     "INTERVIEW_CANCELLED",
-    "INTERVIEW_COMPLETED"
+    "INTERVIEW_COMPLETED",
+    "APPLICATION_SUBMITTED",
+    "APPLICATION_UNDER_REVIEW",
+    "APPLICATION_SHORTLISTED",
+    "APPLICATION_INTERVIEW_SCHEDULED",
+    "APPLICATION_SELECTED",
+    "APPLICATION_REJECTED",
+    "APPLICATION_WITHDRAWN",
 ];
 
 const notificationSchema = new mongoose.Schema(
@@ -35,6 +42,11 @@ const notificationSchema = new mongoose.Schema(
             type: String,
             enum: NOTIFICATION_TYPES,
             required: [true, "Notification type is required"],
+            index: true,
+        },
+        application: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Application",
             index: true,
         },
         interview: {

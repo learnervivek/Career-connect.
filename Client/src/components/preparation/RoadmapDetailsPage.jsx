@@ -247,7 +247,7 @@ const RoadmapDetailsPage = () => {
     };
 
     // Handle Resource Bookmark Toggle
-    const handleToggleBookmark = async (resourceId, title) => {
+    const handleToggleBookmark = async (resourceId, _title) => {
         if (!user) {
             toast.info("Please log in to bookmark learning resources.");
             navigate("/login");

@@ -248,7 +248,8 @@ export const scheduleInterview = async (req, res) => {
             });
         }
 
-        if (application.status !== "accepted") {
+        const allowedInterviewStatuses = ["accepted", "shortlisted", "interview scheduled"];
+        if (!allowedInterviewStatuses.includes(application.status)) {
             return res.status(400).json({
                 message: `Interview can only be scheduled for accepted/shortlisted applications. Current status is '${application.status}'. Please shortlist the applicant first.`,
                 success: false,

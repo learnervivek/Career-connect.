@@ -67,6 +67,7 @@ const Navbar = () => {
                                         <motion.li onClick={resetQuery}><Link to="/">Home</Link></motion.li>
                                         <li onClick={resetQuery}><Link to="/jobs">Jobs</Link></li>
                                         <li onClick={resetQuery}><Link to="/browse">Browse</Link></li>
+                                        <li onClick={resetQuery}><Link to="/my-applications">My Applications</Link></li>
                                         <li onClick={resetQuery}><Link to="/interviews">Interviews</Link></li>
                                         <li onClick={resetQuery}><Link to="/preparation">Preparation Hub</Link></li>
                                     </>
@@ -128,6 +129,10 @@ const Navbar = () => {
                                                             <div className='flex w-fit items-center gap-2 cursor-pointer'>
                                                                 <User2 />
                                                                 <Button className="cursor-pointer" variant="link"><Link to="/profile">View Profile</Link></Button>
+                                                            </div>
+                                                            <div className='flex w-fit items-center gap-2 cursor-pointer'>
+                                                                <BriefcaseBusiness className="w-4 h-4 ml-1 text-purple-600" />
+                                                                <Button className="cursor-pointer" variant="link"><Link to="/my-applications">My Applications</Link></Button>
                                                             </div>
                                                             <div className='flex w-fit items-center gap-2 cursor-pointer'>
                                                                 <Bookmark className="w-4 h-4 ml-1" />
@@ -227,6 +232,11 @@ const Navbar = () => {
                                                             className='flex items-center gap-3 cursor-pointer'>
                                                             <SearchCheck />
                                                             <p className='text-lg font-medium' to="/admin/jobs">Browse</p>
+                                                        </div>
+
+                                                        <div onClick={() => navigate("/my-applications")} className='flex items-center gap-3 cursor-pointer'>
+                                                            <BriefcaseBusiness className="size-5 text-[#6A38C2]" />
+                                                            <p className='text-lg font-medium'>My Applications</p>
                                                         </div>
 
                                                         <div onClick={() => navigate("/interviews")} className='flex items-center gap-3 cursor-pointer'>

@@ -8,6 +8,7 @@ import Jobs from './components/Jobs'
 import Browse from './components/Browse'
 import Profile from './components/Profile'
 import CandidateInterviewsPage from './components/CandidateInterviewsPage'
+import MyApplications from './components/MyApplications'
 import JobDescription from './components/JobDescription'
 import CompanyPreparationPage from './components/preparation/CompanyPreparationPage'
 import CompanyDetailsPage from './components/preparation/CompanyDetailsPage'
@@ -60,6 +61,14 @@ const appRouter = createBrowserRouter([
   {
     path: "/interviews",
     element: <CandidateInterviewsPage />
+  },
+  {
+    path: "/my-applications",
+    element: <MyApplications />
+  },
+  {
+    path: "/applications",
+    element: <MyApplications />
   },
   {
     path: "/preparation",

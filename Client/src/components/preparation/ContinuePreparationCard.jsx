@@ -21,7 +21,7 @@ const getInitials = (name) => {
     return (parts[0][0] + parts[1][0]).toUpperCase();
 };
 
-const ContinuePreparationCard = ({ continuePreparation, onExploreClick }) => {
+const ContinuePreparationCard = ({ continuePreparation, onExploreClick: _onExploreClick }) => {
     if (!continuePreparation) {
         return null;
     }
@@ -32,7 +32,7 @@ const ContinuePreparationCard = ({ continuePreparation, onExploreClick }) => {
         roadmapTitle,
         role,
         hiringTrack,
-        difficulty,
+        difficulty: _difficulty,
         company,
         completionPercentage = 0,
         completedTopicsCount = 0,

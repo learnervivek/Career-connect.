@@ -7,11 +7,12 @@ let transporter = null;
 let lastConfigHash = "";
 
 const getTransporter = () => {
-    const host = process.env.EMAIL_HOST;
-    const port = parseInt(process.env.EMAIL_PORT, 10) || 587;
-    const user = process.env.EMAIL_USER;
-    const pass = process.env.EMAIL_PASS;
-    const secure = process.env.EMAIL_SECURE === "true" || port === 465;
+    const host = process.env.EMAIL_HOST || process.env.SMTP_HOST;
+    const port = parseInt(process.env.EMAIL_PORT || process.env.SMTP_PORT, 10) || 587;
+    const user = (process.env.EMAIL_USER || process.env.SMTP_USER || "").trim();
+    // Automatically strip spaces from App Passwords (e.g., Google App Passwords like "rfkf gvrd eoxp cpcb")
+    const pass = (process.env.EMAIL_PASS || process.env.SMTP_PASS || "").trim().replace(/\s+/g, "");
+    const secure = process.env.EMAIL_SECURE === "true" || process.env.SMTP_SECURE === "true" || port === 465;
 
     if (!host || !user || !pass) {
         // Return null if unconfigured; sendEmail will log gracefully in development mode
@@ -32,6 +33,10 @@ const getTransporter = () => {
             user,
             pass,
         },
+        tls: {
+            // Do not fail on invalid certs
+            rejectUnauthorized: false,
+        },
     });
 
     return transporter;
@@ -47,8 +52,26 @@ export const sendEmail = async ({ to, subject, html, text }) => {
             return { success: false, reason: "No recipient" };
         }
 
+        // In test mode, always simulate delivery so test suites do not exhaust live SMTP daily quotas with fake emails
+        if (process.env.NODE_ENV === "test") {
+            console.log(`[EmailService: Test Mode Simulation] To: ${to} | Subject: "${subject}"`);
+            return {
+                success: true,
+                simulated: true,
+                messageId: `<test-${Date.now()}@careerconnect.com>`,
+            };
+        }
+
         const client = getTransporter();
-        const fromAddress = process.env.EMAIL_FROM || '"Career Connect" <notifications@careerconnect.com>';
+        const user = (process.env.EMAIL_USER || process.env.SMTP_USER || "").trim();
+
+        // If using Gmail SMTP, the "from" address must match the authenticated email to avoid Google sender rejection
+        let fromAddress = process.env.EMAIL_FROM || process.env.SMTP_FROM;
+        if (user.includes("@gmail.com")) {
+            fromAddress = `"Career Connect" <${user}>`;
+        } else if (!fromAddress) {
+            fromAddress = user ? `"Career Connect" <${user}>` : '"Career Connect" <notifications@careerconnect.com>';
+        }
 
         if (!client) {
             // Safe development fallback: Log email details without exposing credentials
@@ -70,8 +93,13 @@ export const sendEmail = async ({ to, subject, html, text }) => {
             html,
         });
 
-        console.log(`[EmailService] Email sent successfully to ${to} (MessageId: ${info.messageId})`);
-        return { success: true, messageId: info.messageId };
+        const previewUrl = nodemailer.getTestMessageUrl(info);
+        if (previewUrl) {
+            console.log(`[EmailService] Email sent successfully to ${to} | 📬 View in Browser: ${previewUrl}`);
+        } else {
+            console.log(`[EmailService] Email sent successfully to ${to} (MessageId: ${info.messageId})`);
+        }
+        return { success: true, messageId: info.messageId, previewUrl };
     } catch (error) {
         // Log error safely without exposing raw credentials or tokens
         console.error(`[EmailService Error] Failed to send email to ${to}: ${error.message}`);
@@ -346,5 +374,208 @@ export const sendInterviewCancelledEmail = async ({ toUser, otherUser, job, inte
         subject,
         html: baseEmailTemplate({ title: "Interview Cancelled", preheader: subject, content }),
         text: `The interview for ${job.title} on ${formattedDate} has been cancelled. Reason: ${cancellationReason || 'N/A'}.`,
+    });
+};
+
+// ─── APPLICATION LIFECYCLE EMAIL GENERATORS ─────────────────────────────
+
+export const sendApplicationSubmittedEmail = async ({ candidate, job, company, application, applicationRef }) => {
+    const formattedDate = new Date(application.createdAt || Date.now()).toLocaleDateString("en-US", {
+        weekday: "short",
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+    });
+
+    const companyName = company?.companyName || company?.name || job?.company?.companyName || "the hiring team";
+    const refCode = applicationRef || application.applicationRef || `APP-${application._id.toString().slice(-6).toUpperCase()}`;
+    const subject = `Application Submitted Successfully — ${job.title}`;
+
+    const content = `
+      <p style="font-size: 15px; margin-top: 0;">Hello <strong>${candidate.fullname}</strong>,</p>
+      <p style="font-size: 14px; line-height: 1.6; color: #334155;">
+        Thank you for applying for the <strong>${job.title}</strong> role at <strong>${companyName}</strong> via Career Connect. Your application has been successfully delivered to the hiring team.
+      </p>
+      <div class="details-box">
+        <div class="detail-row"><span class="detail-label">Application Reference ID</span><span class="detail-value" style="font-family: monospace; color: #6A38C2;">${refCode}</span></div>
+        <div class="detail-row"><span class="detail-label">Position</span><span class="detail-value">${job.title}</span></div>
+        <div class="detail-row"><span class="detail-label">Company</span><span class="detail-value">${companyName}</span></div>
+        <div class="detail-row"><span class="detail-label">Submission Date</span><span class="detail-value">${formattedDate}</span></div>
+        <div class="detail-row"><span class="detail-label">Status</span><span class="detail-value" style="color: #0284c7;">Applied</span></div>
+      </div>
+      <p style="font-size: 13px; color: #64748b;">
+        You can track the progress of your application and any upcoming interview requests directly in your candidate dashboard.
+      </p>
+    `;
+
+    const actionButton = {
+        text: "View Application in Dashboard",
+        url: `${process.env.FRONTEND_URL || "http://localhost:5173"}/my-applications`,
+    };
+
+    return await sendEmail({
+        to: candidate.email,
+        subject,
+        html: baseEmailTemplate({ title: "Application Confirmation", preheader: subject, content, actionButton }),
+        text: `Hello ${candidate.fullname}, your application for ${job.title} at ${companyName} has been submitted successfully. Application Ref: ${refCode}. Track it at ${process.env.FRONTEND_URL || "http://localhost:5173"}/my-applications`,
+    });
+};
+
+export const sendApplicationShortlistedEmail = async ({ candidate, job, company, application, message, nextSteps }) => {
+    const companyName = company?.companyName || company?.name || job?.company?.companyName || "the hiring team";
+    const subject = `Application Update — ${job.title}`;
+
+    const content = `
+      <p style="font-size: 15px; margin-top: 0;">Hello <strong>${candidate.fullname}</strong>,</p>
+      <p style="font-size: 14px; line-height: 1.6; color: #334155;">
+        Great news! Your application for <strong>${job.title}</strong> at <strong>${companyName}</strong> has been <strong>shortlisted</strong> for further consideration.
+      </p>
+      <div class="details-box">
+        <div class="detail-row"><span class="detail-label">Position</span><span class="detail-value">${job.title}</span></div>
+        <div class="detail-row"><span class="detail-label">Company</span><span class="detail-value">${companyName}</span></div>
+        <div class="detail-row"><span class="detail-label">Updated Status</span><span class="detail-value" style="color: #6A38C2;">Shortlisted</span></div>
+      </div>
+      ${message ? `
+        <div class="instructions-box" style="border-left-color: #6A38C2; background-color: #f5f3ff; color: #4338ca;">
+          <strong>Message from Recruiter:</strong><br/>
+          "${message}"
+        </div>
+      ` : ''}
+      <div class="instructions-box" style="border-left-color: #3b82f6; background-color: #eff6ff; color: #1e40af;">
+        <strong>Next Steps:</strong><br/>
+        ${nextSteps || "The recruiting team will contact you or post an interview schedule on your Career Connect dashboard shortly. Please ensure your contact information is up to date."}
+      </div>
+      <p style="font-size: 13px; color: #64748b;">
+        Please note: Shortlisting represents advancement to the candidate evaluation round and is part of the hiring review process.
+      </p>
+    `;
+
+    const actionButton = {
+        text: "Track Application",
+        url: `${process.env.FRONTEND_URL || "http://localhost:5173"}/my-applications`,
+    };
+
+    return await sendEmail({
+        to: candidate.email,
+        subject,
+        html: baseEmailTemplate({ title: "Application Shortlisted", preheader: subject, content, actionButton }),
+        text: `Hello ${candidate.fullname}, your application for ${job.title} at ${companyName} has been shortlisted. Check your dashboard at ${process.env.FRONTEND_URL || "http://localhost:5173"}/my-applications`,
+    });
+};
+
+export const sendApplicationSelectedEmail = async ({ candidate, job, company, application, message }) => {
+    const companyName = company?.companyName || company?.name || job?.company?.companyName || "the hiring team";
+    const subject = `Application Selection — ${job.title}`;
+
+    const content = `
+      <p style="font-size: 15px; margin-top: 0;">Dear <strong>${candidate.fullname}</strong>,</p>
+      <p style="font-size: 14px; line-height: 1.6; color: #334155;">
+        Congratulations! We are delighted to inform you that you have been <strong>selected</strong> for the <strong>${job.title}</strong> role at <strong>${companyName}</strong>!
+      </p>
+      <div class="details-box">
+        <div class="detail-row"><span class="detail-label">Position</span><span class="detail-value">${job.title}</span></div>
+        <div class="detail-row"><span class="detail-label">Company</span><span class="detail-value">${companyName}</span></div>
+        <div class="detail-row"><span class="detail-label">Outcome</span><span class="detail-value" style="color: #059669; font-weight: 700;">Selected / Offer Stage</span></div>
+      </div>
+      ${message ? `
+        <div class="instructions-box" style="border-left-color: #059669; background-color: #ecfdf5; color: #065f46;">
+          <strong>Message from Hiring Team:</strong><br/>
+          "${message}"
+        </div>
+      ` : ''}
+      <p style="font-size: 13px; color: #64748b;">
+        The recruitment team will be in touch with next steps regarding your formal offer and onboarding process.
+      </p>
+    `;
+
+    const actionButton = {
+        text: "View in Career Connect",
+        url: `${process.env.FRONTEND_URL || "http://localhost:5173"}/my-applications`,
+    };
+
+    return await sendEmail({
+        to: candidate.email,
+        subject,
+        html: baseEmailTemplate({ title: "Congratulations — Offer & Selection", preheader: subject, content, actionButton }),
+        text: `Congratulations ${candidate.fullname}! You have been selected for ${job.title} at ${companyName}. Next steps will follow.`,
+    });
+};
+
+export const sendApplicationRejectedEmail = async ({ candidate, job, company, application, rejectionReason }) => {
+    const companyName = company?.companyName || company?.name || job?.company?.companyName || "the hiring team";
+    const subject = `Application Status Update — ${job.title}`;
+
+    const content = `
+      <p style="font-size: 15px; margin-top: 0;">Hello <strong>${candidate.fullname}</strong>,</p>
+      <p style="font-size: 14px; line-height: 1.6; color: #334155;">
+        Thank you for taking the time to apply for the <strong>${job.title}</strong> position at <strong>${companyName}</strong> and for your interest in joining our team.
+      </p>
+      <p style="font-size: 14px; line-height: 1.6; color: #334155;">
+        After careful evaluation of all candidates, the hiring team has decided to proceed with other applicants whose experience and skill set more closely align with the immediate requirements for this role.
+      </p>
+      ${rejectionReason ? `
+        <div class="instructions-box" style="border-left-color: #64748b; background-color: #f8fafc; color: #475569;">
+          <strong>Feedback from Recruiter:</strong><br/>
+          "${rejectionReason}"
+        </div>
+      ` : ''}
+      <div class="details-box">
+        <div class="detail-row"><span class="detail-label">Position</span><span class="detail-value">${job.title}</span></div>
+        <div class="detail-row"><span class="detail-label">Company</span><span class="detail-value">${companyName}</span></div>
+        <div class="detail-row"><span class="detail-label">Status</span><span class="detail-value" style="color: #dc2626;">Not Selected</span></div>
+      </div>
+      <p style="font-size: 13px; color: #64748b;">
+        We truly appreciate your effort throughout this process and encourage you to explore other open opportunities on Career Connect that match your expertise.
+      </p>
+    `;
+
+    const actionButton = {
+        text: "Explore Other Opportunities",
+        url: `${process.env.FRONTEND_URL || "http://localhost:5173"}/jobs`,
+    };
+
+    return await sendEmail({
+        to: candidate.email,
+        subject,
+        html: baseEmailTemplate({ title: "Application Status Update", preheader: subject, content, actionButton }),
+        text: `Hello ${candidate.fullname}, thank you for applying for ${job.title} at ${companyName}. The hiring team has decided to move forward with other candidates. We encourage you to explore other openings at ${process.env.FRONTEND_URL || "http://localhost:5173"}/jobs`,
+    });
+};
+
+export const sendApplicationUnderReviewEmail = async ({ candidate, job, company, application, message }) => {
+    const companyName = company?.companyName || company?.name || job?.company?.companyName || "the hiring team";
+    const subject = `Application Status Update — ${job.title}`;
+
+    const content = `
+      <p style="font-size: 15px; margin-top: 0;">Hello <strong>${candidate.fullname}</strong>,</p>
+      <p style="font-size: 14px; line-height: 1.6; color: #334155;">
+        Your application for <strong>${job.title}</strong> at <strong>${companyName}</strong> is now actively <strong>Under Review</strong> by our recruiting team.
+      </p>
+      <div class="details-box">
+        <div class="detail-row"><span class="detail-label">Position</span><span class="detail-value">${job.title}</span></div>
+        <div class="detail-row"><span class="detail-label">Company</span><span class="detail-value">${companyName}</span></div>
+        <div class="detail-row"><span class="detail-label">Current Status</span><span class="detail-value" style="color: #d97706;">Under Review</span></div>
+      </div>
+      ${message ? `
+        <div class="instructions-box" style="border-left-color: #d97706; background-color: #fffbeb; color: #92400e;">
+          <strong>Message from Reviewer:</strong><br/>
+          "${message}"
+        </div>
+      ` : ''}
+      <p style="font-size: 13px; color: #64748b;">
+        We will notify you as soon as there is a status update or interview invitation.
+      </p>
+    `;
+
+    const actionButton = {
+        text: "Track Application",
+        url: `${process.env.FRONTEND_URL || "http://localhost:5173"}/my-applications`,
+    };
+
+    return await sendEmail({
+        to: candidate.email,
+        subject,
+        html: baseEmailTemplate({ title: "Application Under Review", preheader: subject, content, actionButton }),
+        text: `Hello ${candidate.fullname}, your application for ${job.title} at ${companyName} is now under review. Track it at ${process.env.FRONTEND_URL || "http://localhost:5173"}/my-applications`,
     });
 };

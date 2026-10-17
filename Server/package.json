@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "test": "NODE_ENV=test node --require ./node-compat.cjs test_interview_integration.js",
+    "test:app": "NODE_ENV=test node --require ./node-compat.cjs test_application_tracking.js",
     "test:prep": "NODE_ENV=test node --require ./node-compat.cjs test_preparation_hub.js",
     "test:progress": "NODE_ENV=test node --require ./node-compat.cjs test_progress_tracking.js",
     "test:admin": "NODE_ENV=test node --require ./node-compat.cjs test_admin_preparation.js",
